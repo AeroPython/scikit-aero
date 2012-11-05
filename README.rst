@@ -53,6 +53,8 @@ Dependencies
 * NumPy >= 1.6
 * SciPy >= 0.11
 
+TODO: Test with older versions.
+
 Install
 =======
 
@@ -60,17 +62,21 @@ This package uses distutils. To install, execute as usual::
 
   python setup.py install
 
+TODO: Create actual install script.
+
 Testing
 =======
 
-scikit-aero recommends py.test for running the test suite::
+scikit-aero recommends py.test for running the test suite. Running from the
+top directory::
 
   py.test
 
 License
 =======
 
-Please refer to COPYING in this directory.
+scikit-aero is released under the BSD license, hence allowing commercial use
+of the library. Please refer to the COPYING file.
 
 See also
 ========

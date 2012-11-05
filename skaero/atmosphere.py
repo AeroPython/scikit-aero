@@ -19,17 +19,21 @@ from __future__ import division
 
 import numpy as np
 
+g_0p = 9.80665  # m / s^2
+M_0 = 28.9644e-3  # kg / mol
+Rs = 8.31432  # N m / (mol K)
+
 
 def coesa(h):
     """Computes COESA atmosphere properties.
 
     Returns temperature, pressure and density COESA values at the given
-    altitude.
+    geopotential altitude.
 
     Parameters
     ----------
     h : array_like
-       Altitude given in meters.
+       Geopotential altitude given in meters.
 
     Returns
     -------
@@ -45,11 +49,27 @@ def coesa(h):
     Notes
     -----
     Based on the U.S. 1976 Standard Atmosphere.
+    TODO: Add link.
 
     """
+
+    # FIXME: Having these variables here feels like a total hack for me,
+    # and will be worse as soon as I add more layers. I need another module,
+    # or a class, or something.
+    h_0 = 0.0  # m
+    T_0 = 288.150  # K
+    p_0 = 101325.0  # Pa
+    L_0 = -6.5e-3  # K / m
+
     ones = np.ones_like(h)
+
+    # Is this actually molecular-scale temperature?
+    T = T_0 + L_0 * (h - h_0)  # Linear relation for 0 < h < 11000
+    # TODO: Maybe use pressure ratio to be consistent w/ the COESA standard.
+    p = p_0 * (T_0 / (T_0 + L_0 * (h - h_0))) ** (g_0p * M_0 / (Rs * L_0))
+    rho = p * M_0 / (Rs * T)
     return (
         h,
-        288.150 * ones,
-        101325.0 * ones,
-        1.2250 * ones)
+        T,
+        p,
+        rho)
