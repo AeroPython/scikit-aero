@@ -13,6 +13,13 @@ from skaero import atmosphere
 
 h, T, p, rho = atmosphere.coesa(1000)  # Properties at 1 km of altitude
 
+ToDo
+----
+* Validate against http://www.sworld.com.au/steven/space/atmosphere/
+* Check geopotential temperature
+* Implement pressure ratio?
+* Move to OOP
+
 """
 
 from __future__ import division
@@ -38,7 +45,7 @@ def coesa(h):
     Returns
     -------
     h : array_like
-        Given altitude in meters.
+        Given geopotential altitude in meters.
     T : array_like
         Temperature in Kelvin.
     p : array_like
