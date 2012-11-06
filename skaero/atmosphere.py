@@ -68,8 +68,6 @@ def coesa(h):
     p_0 = 101325.0  # Pa
     L_0 = -6.5e-3  # K / m
 
-    ones = np.ones_like(h)
-
     # Is this actually molecular-scale temperature?
     T = T_0 + L_0 * (h - h_0)  # Linear relation for 0 < h < 11000
     # TODO: Maybe use pressure ratio to be consistent w/ the COESA standard.
