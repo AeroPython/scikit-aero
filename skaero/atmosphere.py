@@ -11,13 +11,12 @@ Examples
 --------
 from skaero import atmosphere
 
-h, T, p, rho = atmosphere.coesa(1000)  # Properties at 1 km of altitude
+# Properties at 1 km of altitude according to the U.S. 1976 Standard Atmosphere
+h, T, p, rho = atmosphere.coesa(1000)
 
 ToDo
 ----
-* Validate against http://www.sworld.com.au/steven/space/atmosphere/
 * Check geopotential temperature
-* Implement pressure ratio?
 * Move to OOP
 
 """
@@ -55,8 +54,9 @@ def coesa(h):
 
     Notes
     -----
-    Based on the U.S. 1976 Standard Atmosphere.
-    TODO: Add link.
+    Based on the `U.S. 1976 Standard Atmosphere`_.
+
+    .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539_1977009539.pdf
 
     """
 
