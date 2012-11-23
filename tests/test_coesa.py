@@ -95,15 +95,21 @@ def test_under_11km():
 
     """
     h_ = np.array([500.0, 2500.0, 6500.0, 9000.0, 11000.0])
+
+    # Retrieve desired data from PDAS tables
     desired = np.array([data[data[:, 0] == x][0] for x in h_ / 1000.0])
+
     T_ = desired[:, 4]
     p_ = desired[:, 5]
     rho_ = desired[:, 6]
+
     h, T, p, rho = coesa(h_)
 
     np.testing.assert_array_equal(h, h_)
-    # FIXME: The temperature starts to diverge at higher altitudes. Must
-    # check.
+    # FIXME: The PDAS program and the tables obtained through it use
+    # **geometric** altitude and not geopotential altitude, even though
+    # the computations are done using geopotential altitude. That's why
+    # these tests fail.
     np.testing.assert_array_almost_equal(T, T_, decimal=1)
     np.testing.assert_array_almost_equal(p, p_, decimal=0)
     np.testing.assert_array_almost_equal(rho, rho_, decimal=3)
