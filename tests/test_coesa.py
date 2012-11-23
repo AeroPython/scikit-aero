@@ -18,8 +18,7 @@ import scipy as sp
 import numpy.testing
 import scipy.constants
 
-from skaero import atmosphere  # Just in case there are utility functions
-from skaero.atmosphere import coesa
+from skaero.atmosphere.coesa import coesa
 
 
 # Load data from PDAS atmos

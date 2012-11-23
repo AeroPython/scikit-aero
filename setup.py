@@ -14,7 +14,7 @@ setup(
         "engineering", "atmosphere", "gas"
     ],
     requires=["numpy", "scipy"],
-    packages=["skaero"]
+    packages=["skaero", "skaero.atmosphere", "skaero.gasdynamics"]
     )
 
 setup()

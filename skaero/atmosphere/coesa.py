@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-Atmosphere properties.
+COESA model.
 
 Routines
 --------
@@ -12,7 +12,7 @@ Examples
 from skaero import atmosphere
 
 # Properties at 1 km of altitude according to the U.S. 1976 Standard Atmosphere
-h, T, p, rho = atmosphere.coesa(1000)
+h, T, p, rho = atmosphere.coesa.coesa(1000)
 
 ToDo
 ----
