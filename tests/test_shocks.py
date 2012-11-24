@@ -1,20 +1,18 @@
 # coding: utf-8
 
 """
-Test of the Gas Dynamics calculations module.
+Tests of the shocks package.
 
 """
 
 from __future__ import division
 
 import numpy as np
-import scipy as sp
 import numpy.testing
-import scipy.constants
 
 import pytest
 
-from skaero.gasdynamics import isentropic, shocks
+from skaero.gasdynamics import shocks
 
 
 def test_normal_shock_constructor():
@@ -23,7 +21,7 @@ def test_normal_shock_constructor():
     """
     gamma = 1.4
     M_1 = 2.0
-    ns = shocks.NormalShock(M_1, gamma)
+    shocks.NormalShock(M_1, gamma)
 
 
 def test_normal_shock_default_adiabatic_index():
@@ -58,7 +56,7 @@ def test_normal_shock_fails_asubsonic_M_1():
 
     """
     with pytest.raises(ValueError):
-        ns = shocks.NormalShock(0.8)
+        shocks.NormalShock(0.8)
 
 
 def test_normal_shock_pressure_ratio():
@@ -77,4 +75,6 @@ def test_normal_shock_pressure_ratio():
     ns_list = [shocks.NormalShock(M_1, 1.4) for M_1 in M_1_list]
 
     for i in range(len(ns_list)):
-        np.testing.assert_almost_equal(ns_list[i].p_ratio, p_ratio_list[i], decimal=4)
+        np.testing.assert_almost_equal(
+            ns_list[i].p_ratio, p_ratio_list[i], decimal=4
+        )

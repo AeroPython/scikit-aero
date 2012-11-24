@@ -3,11 +3,16 @@
 """
 Shock waves.
 
+Classes
+-------
+NormalShock(M_1, gamma)
+
 """
 
 from __future__ import division
 
 import numpy as np
+
 
 class NormalShock(object):
     """Class representing a normal shock.
@@ -54,5 +59,8 @@ class NormalShock(object):
         Resultant pressure over incident pressure.
 
         """
-        p_ratio = 1 + 2 * self.gamma * (self.M_1 * self.M_1 - 1) / (self.gamma + 1)
+        p_ratio = (
+            1 + 2 * self.gamma *
+            (self.M_1 * self.M_1 - 1) / (self.gamma + 1)
+        )
         return p_ratio

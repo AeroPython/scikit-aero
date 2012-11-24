@@ -8,8 +8,8 @@ in the `PDAS Standard Atmosphere`_, which are included here. Only
 test_under_1000 uses the values of the `standard`_, and it is retained just
 for historical reasons because there seems to be some inaccuracies there.
 
-.. _`PDAS Standard Atmosphere`:: http://www.pdas.com/atmos.html
-.. _`standard`:: http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539_1977009539.pdf
+.. _`PDAS Standard Atmosphere`: http://www.pdas.com/atmos.html
+.. _`standard`: http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539_1977009539.pdf
 
 """
 
