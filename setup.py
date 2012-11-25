@@ -2,9 +2,11 @@
 
 from distutils.core import setup
 
+from skaero import __version__
+
 setup(
     name="scikit-aero",
-    version="0.1",
+    version=__version__,
     description="Aeronautical engineering calculations in Python.",
     author="Juan Luis Cano",
     author_email="juanlu001@gmail.com",
@@ -30,5 +32,3 @@ setup(
     ],
     long_description=open('README.rst').read()
 )
-
-setup()

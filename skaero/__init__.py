@@ -13,3 +13,5 @@ gasdynamics
     Gas dynamics calculations.
 
 """
+
+__version__ = '0.1'
