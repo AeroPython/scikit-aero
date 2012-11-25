@@ -11,10 +11,6 @@ Classes
 -------
 IsentropicFlow(gamma)
 
-TODO
-----
-* Add decorator to check positive Mach number?
-
 """
 
 from __future__ import division
@@ -22,6 +18,8 @@ from __future__ import division
 import numpy as np
 import scipy as sp
 import scipy.optimize
+
+from skaero.decorators import arrayize, check_negative_mach
 
 
 def mach_from_area_ratio(fl, A_ratio):
@@ -78,6 +76,30 @@ class IsentropicFlow(object):
 
         """
         self.gamma = gamma
+
+    def T_T0(self, M):
+        """Temperature ratio from Mach number.
+
+        Static tempeature divided by stagnation temperature at the point with
+        given Mach number.
+
+        Arguments
+        ---------
+        M : array_like
+            Mach number.
+
+        Returns
+        -------
+        T_T0 : array_like
+            Temperature ratio.
+
+        """
+        M_ = np.asanyarray(M)
+        if np.any(M_ < 0.0):
+            raise ValueError("Mach number must be positive.")
+
+        T_T0 = 1 / (1 + (self.gamma - 1) * M_ * M_ / 2)
+        return T_T0
 
     def p_p0(self, M):
         """Pressure ratio from Mach number.

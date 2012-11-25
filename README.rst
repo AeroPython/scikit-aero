@@ -82,16 +82,17 @@ Install
 
 This package uses distutils. To install, execute as usual::
 
-  python setup.py install
+  $ python setup.py install
 
 It is recommended that you **never ever use sudo** with distutils, pip,
 setuptools and friends in Linux because you might seriously break your
-system [1_][2_][3_]. I recommend using `virtualenv`_, `per user directories`_
+system [1_][2_][3_][4_]. I recommend using `virtualenv`_, `per user directories`_
 or `local installations`_.
 
-.. _1: http://stackoverflow.com/questions/4314376/how-can-i-install-a-python-egg-file/4314446#comment4690673_4314446
-.. _2: http://workaround.org/easy-install-debian
-.. _3: http://matplotlib.1069221.n5.nabble.com/Why-is-pip-not-mentioned-in-the-Installation-Documentation-tp39779p39812.html
+.. _1: http://wiki.python.org/moin/CheeseShopTutorial#Distutils_Installation
+.. _2: http://stackoverflow.com/questions/4314376/how-can-i-install-a-python-egg-file/4314446#comment4690673_4314446
+.. _3: http://workaround.org/easy-install-debian
+.. _4: http://matplotlib.1069221.n5.nabble.com/Why-is-pip-not-mentioned-in-the-Installation-Documentation-tp39779p39812.html
 
 .. _`virtualenv`: http://pypi.python.org/pypi/virtualenv
 .. _`per user directories`: http://stackoverflow.com/a/7143496/554319
@@ -103,7 +104,7 @@ Testing
 scikit-aero recommends py.test for running the test suite. Running from the
 top directory::
 
-  py.test
+  $ py.test
 
 Bug reporting
 =============

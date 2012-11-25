@@ -14,6 +14,8 @@ from __future__ import division
 import numpy as np
 import numpy.testing
 
+import pytest
+
 from skaero.gasdynamics import isentropic
 
 
@@ -23,6 +25,15 @@ def test_isentropic_flow_constructor():
     """
     gamma = 1.4
     isentropic.IsentropicFlow(gamma)
+
+
+def test_negative_mach_number_pressure_ratio():
+    """Tests if negative Mach number raises an error when computing pressure.
+
+    """
+    fl = isentropic.IsentropicFlow()
+    with pytest.raises(ValueError):
+        fl.p_p0(-1.0)
 
 
 def test_pressure_ratio():
