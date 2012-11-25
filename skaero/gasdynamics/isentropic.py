@@ -19,8 +19,6 @@ import numpy as np
 import scipy as sp
 import scipy.optimize
 
-from skaero.decorators import arrayize, check_negative_mach
-
 
 def mach_from_area_ratio(fl, A_ratio):
     """Computes the Mach number given an area ratio asuming isentropic flow.
@@ -28,8 +26,8 @@ def mach_from_area_ratio(fl, A_ratio):
     Uses the relation between Mach number and area ratio for isentropic flow,
     and returns both the subsonic and the supersonic solution.
 
-    Arguments
-    ---------
+    Parameters
+    ----------
     fl : IsentropicFlow
         Isentropic flow object.
     A_ratio : float
@@ -65,16 +63,13 @@ def mach_from_area_ratio(fl, A_ratio):
 class IsentropicFlow(object):
     """Class representing an isentropic flow.
 
+    Parameters
+    ----------
+    gamma : float, optional
+        Specific heat ratio, default 7 / 5.
+
     """
     def __init__(self, gamma=1.4):
-        """Constructor.
-
-        Arguments
-        ---------
-        gamma : float, optional
-            Specific heat ratio, default 7 / 5.
-
-        """
         self.gamma = gamma
 
     def T_T0(self, M):

@@ -10,6 +10,6 @@ atmosphere
     Computation of atmosphere properties.
 
 gasdynamics
-    Gas Dynamics calculations.
+    Gas dynamics calculations.
 
 """

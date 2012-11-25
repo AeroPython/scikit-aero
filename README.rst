@@ -1,10 +1,10 @@
 scikit-aero
 ===========
 
-:name: scikit-aero
-:website: https://github.com/Juanlu001/scikit-aero
-:author: Juan Luis Cano <juanlu001@gmail.com>
-:version: 0.1
+:Name: scikit-aero
+:Website: https://github.com/Juanlu001/scikit-aero
+:Author: Juan Luis Cano <juanlu001@gmail.com>
+:Version: 0.1
 
 scikit-aero is a Python package for various aeronautical engineering
 calculations. It is based on several existing Python packages on the field,
@@ -29,12 +29,13 @@ Features
 * Full support of NumPy arrays.
 * Support for both Python 2 and 3.
 * Fully tested and documented.
-* Standard atmosphere properties up to ~85 kilometers.
+* Standard atmosphere properties up to 11 kilometers (troposphere).
 * Gas dynamics calculations.
 
 Future
 ------
 
+* Full COESA model.
 * Airspeed conversions.
 * Coordinate systems.
 * Most of the PDAS.
@@ -44,24 +45,20 @@ Usage
 
 Atmosphere properties::
 
-  from skaero import atmosphere
-
-  h, T, p, rho = atmosphere.coesa(1000)  # Altitude by default, 1 km
-  a = atmosphere.speed_of_sound(T)  # Compute speed of sound from temperature
+  >>> from skaero.atmosphere import coesa
+  >>> h, T, p, rho = coesa.table(1000)  # Altitude by default, 1 km
 
 Inverse computations allowed with density and pressure, which are monotonic::
 
-  h, T, p, rho = atmosphere.coesa(p=101325)  # Pressure of 1 atm
+  >>> h, T, p, rho = coesa.table(p=101325)  # Pressure of 1 atm
 
 Gas dynamics calculations::
 
-  from skaero.gasdynamics import isentropic, shocks
-
-  fl = isentropic.IsentropicFlow(gamma=1.4)
-  p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
-
-  ns = shocks.NormalShock(M_1=2.5, gamma=1.4)
-  M_2 = ns.M_2  # Mach number behind a normal shock wave
+  >>> from skaero.gasdynamics import isentropic, shocks
+  >>> fl = isentropic.IsentropicFlow(gamma=1.4)
+  >>> p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
+  >>> ns = shocks.NormalShock(M_1=2.5, gamma=1.4)
+  >>> M_2 = ns.M_2  # Mach number behind a normal shock wave
 
 Dependencies
 ============

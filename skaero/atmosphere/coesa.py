@@ -5,16 +5,15 @@ COESA model.
 
 Routines
 --------
+geometric_to_geopotential(z)
 coesa(h)
 
 Examples
 --------
-from skaero import atmosphere
+>>> from skaero.atmosphere import coesa
+>>> h, T, p, rho = coesa.table(1000)
 
-# Properties at 1 km of altitude according to the U.S. 1976 Standard Atmosphere
-h, T, p, rho = atmosphere.coesa.coesa(1000)
-
-ToDo
+TODO
 ----
 * Check geopotential temperature
 * Move to OOP
@@ -25,13 +24,33 @@ from __future__ import division
 
 import numpy as np
 
+R_Earth = 6369.0e3  # m
+
 g_0p = 9.80665  # m / s^2
 M_0 = 28.9644e-3  # kg / mol
 Rs = 8.31432  # N m / (mol K)
 
 
-def coesa(h):
-    """Computes COESA atmosphere properties.
+def geometric_to_geopotential(z):
+    """Returns geopotential altitude from geometric altitude.
+
+    Parameters
+    ----------
+    z : array_like
+        Geometric altitude in meters.
+
+    Returns
+    -------
+    h : array_like
+        Geopotential altitude in meters.
+
+    """
+    h = z * R_Earth / (z + R_Earth)
+    return h
+
+
+def table(h):
+    """Computes table of COESA atmosphere properties.
 
     Returns temperature, pressure and density COESA values at the given
     geopotential altitude.

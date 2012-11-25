@@ -76,5 +76,5 @@ def test_normal_shock_pressure_ratio():
 
     for i in range(len(ns_list)):
         np.testing.assert_almost_equal(
-            ns_list[i].p_ratio, p_ratio_list[i], decimal=4
+            ns_list[i].p2_p1, p_ratio_list[i], decimal=4
         )
