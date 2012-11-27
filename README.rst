@@ -4,7 +4,7 @@ scikit-aero
 :Name: scikit-aero
 :Website: https://github.com/Juanlu001/scikit-aero
 :Author: Juan Luis Cano <juanlu001@gmail.com>
-:Version: 0.1
+:Version: 0.2
 
 scikit-aero is a Python package for various aeronautical engineering
 calculations. It is based on several existing Python packages on the field,
@@ -74,6 +74,16 @@ willing to provide testing on this platforms, please
 `contact me <mailto:juanlu001@gmail.com>`_ and if you find any bugs file them
 on the `issue tracker`_.
 
+Optional
+--------
+
+For running the tests, `py.test`_ is recommended (see below). The examples are
+in `IPython`_ notebook format, so to run them locally you will need a recent
+version of IPython and its dependencies.
+
+.. _`py.test`: http://pytest.org
+.. _`IPython`: http://ipython.org/
+
 Install
 =======
 
@@ -102,6 +112,17 @@ scikit-aero recommends py.test for running the test suite. Running from the
 top directory::
 
   $ py.test
+
+Examples
+========
+
+Some applied examples are in the folder `examples` in the IPython notebook
+format. To see them without running locally, use `nbviewer`_; for example,
+to see the `cd_nozzle.ipynb` notebook, browse to
+
+http://nbviewer.ipython.org/url/raw.github.com/Juanlu001/scikit-aero/master/examples/cd_nozzle.ipynb
+
+.. _`nbviewer`: http://nbviewer.ipython.org/
 
 Bug reporting
 =============
