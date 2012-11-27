@@ -69,6 +69,7 @@ def test_area_ratio():
         1.043,
         1.902
     ]
-    np.testing.assert_array_almost_equal(
-        fl.A_Astar(M_list), A_ratio_list, decimal=3
-    )
+    with np.errstate(divide='ignore'):
+        np.testing.assert_array_almost_equal(
+            fl.A_Astar(M_list), A_ratio_list, decimal=3
+        )

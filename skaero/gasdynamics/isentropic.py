@@ -145,7 +145,7 @@ class IsentropicFlow(object):
         if np.any(M < 0.0):
             raise ValueError("Mach number must be positive.")
 
-        # If there is any zero entry, NumPy array division gives infnity,
+        # If there is any zero entry, NumPy array division gives infinity,
         # which is correct.
         A_Astar = (
             (2 * (1 + (self.gamma - 1) * M * M / 2) / (self.gamma + 1)) **
