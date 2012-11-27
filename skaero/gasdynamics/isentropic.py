@@ -19,6 +19,8 @@ import numpy as np
 import scipy as sp
 import scipy.optimize
 
+from skaero import decorators
+
 
 def mach_from_area_ratio(fl, A_ratio):
     """Computes the Mach number given an area ratio asuming isentropic flow.
@@ -72,6 +74,7 @@ class IsentropicFlow(object):
     def __init__(self, gamma=1.4):
         self.gamma = gamma
 
+    @decorators.arrayize
     def T_T0(self, M):
         """Temperature ratio from Mach number.
 
@@ -89,13 +92,13 @@ class IsentropicFlow(object):
             Temperature ratio.
 
         """
-        M_ = np.asanyarray(M)
-        if np.any(M_ < 0.0):
+        if np.any(M < 0.0):
             raise ValueError("Mach number must be positive.")
 
-        T_T0 = 1 / (1 + (self.gamma - 1) * M_ * M_ / 2)
+        T_T0 = 1 / (1 + (self.gamma - 1) * M * M / 2)
         return T_T0
 
+    @decorators.arrayize
     def p_p0(self, M):
         """Pressure ratio from Mach number.
 
@@ -113,16 +116,16 @@ class IsentropicFlow(object):
             Pressure ratio.
 
         """
-        M_ = np.asanyarray(M)
-        if np.any(M_ < 0.0):
+        if np.any(M < 0.0):
             raise ValueError("Mach number must be positive.")
 
         p_p0 = (
-            (1 + (self.gamma - 1) * M_ * M_ / 2) **
+            (1 + (self.gamma - 1) * M * M / 2) **
             (self.gamma / (1 - self.gamma))
         )
         return p_p0
 
+    @decorators.arrayize
     def A_Astar(self, M):
         """Area ratio from Mach number.
 
@@ -139,14 +142,13 @@ class IsentropicFlow(object):
             Area ratio.
 
         """
-        M_ = np.asanyarray(M)
-        if np.any(M_ < 0.0):
+        if np.any(M < 0.0):
             raise ValueError("Mach number must be positive.")
 
         # If there is any zero entry, NumPy array division gives infnity,
         # which is correct.
         A_Astar = (
-            (2 * (1 + (self.gamma - 1) * M_ * M_ / 2) / (self.gamma + 1)) **
+            (2 * (1 + (self.gamma - 1) * M * M / 2) / (self.gamma + 1)) **
             ((self.gamma + 1) / (2 * (self.gamma - 1))) / M
         )
         return A_Astar
