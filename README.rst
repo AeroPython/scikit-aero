@@ -2,7 +2,7 @@ scikit-aero
 ===========
 
 :Name: scikit-aero
-:Website: https://github.com/Juanlu001/scikit-aero
+:Website: https://github.com/Pybonacci/scikit-aero
 :Author: Juan Luis Cano <juanlu001@gmail.com>
 :Version: 0.2
 
@@ -15,7 +15,7 @@ It was started by Juan Luis Cano in 2012 and it is currently developed and
 maintained by him. The source code and issue tracker are both hosted on
 GitHub
 
-https://github.com/Juanlu001/scikit-aero
+https://github.com/Pybonacci/scikit-aero
 
 **Notice**: This package is under heavy development and the API might change
 at any time until a 1.0 version is reached. It is stable but not feaure
@@ -120,7 +120,7 @@ Some applied examples are in the folder `examples` in the IPython notebook
 format. To see them without running locally, use `nbviewer`_; for example,
 to see the `cd_nozzle.ipynb` notebook, browse to
 
-http://nbviewer.ipython.org/url/raw.github.com/Juanlu001/scikit-aero/master/examples/cd_nozzle.ipynb
+http://nbviewer.ipython.org/url/raw.github.com/Pybonacci/scikit-aero/master/examples/cd_nozzle.ipynb
 
 .. _`nbviewer`: http://nbviewer.ipython.org/
 
