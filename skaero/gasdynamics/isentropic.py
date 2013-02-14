@@ -11,6 +11,12 @@ Classes
 -------
 IsentropicFlow(gamma)
 
+Examples
+--------
+>>> from skaero.gasdynamics import isentropic
+>>> fl = Isentropic(gamma=1.4)
+>>> _, M = isentropic.mach_from_area_ratio(fl, 2.5)
+
 """
 
 from __future__ import division
@@ -48,8 +54,7 @@ def mach_from_area_ratio(fl, A_ratio):
 
     """
     def eq(M, fl, A_ratio):
-        result = fl.A_Astar(M) - A_ratio
-        return result
+        return fl.A_ratio(M) - A_ratio
 
     if A_ratio < 1.0:
         raise ValueError("Area ratio must be greater than 1.")
@@ -81,8 +86,8 @@ class IsentropicFlow(object):
         Static tempeature divided by stagnation temperature at the point with
         given Mach number.
 
-        Arguments
-        ---------
+        Parameters
+        ----------
         M : array_like
             Mach number.
 
@@ -105,8 +110,8 @@ class IsentropicFlow(object):
         Static pressure divided by stagnation pressure at the point with given
         Mach number.
 
-        Arguments
-        ---------
+        Parameters
+        ----------
         M : array_like
             Mach number.
 
@@ -119,26 +124,23 @@ class IsentropicFlow(object):
         if np.any(M < 0.0):
             raise ValueError("Mach number must be positive.")
 
-        p_p0 = (
-            (1 + (self.gamma - 1) * M * M / 2) **
-            (self.gamma / (1 - self.gamma))
-        )
+        p_p0 = self.T_T0(M) ** (self.gamma / (self.gamma - 1))
         return p_p0
 
     @decorators.arrayize
-    def A_Astar(self, M):
+    def A_ratio(self, M):
         """Area ratio from Mach number.
 
         Duct area divided by critial area given Mach number.
 
-        Arguments
-        ---------
+        Parameters
+        ----------
         M : array_like
             Mach number.
 
         Returns
         -------
-        A_Astar : array_like
+        A_ratio : array_like
             Area ratio.
 
         """
@@ -147,8 +149,21 @@ class IsentropicFlow(object):
 
         # If there is any zero entry, NumPy array division gives infinity,
         # which is correct.
-        A_Astar = (
-            (2 * (1 + (self.gamma - 1) * M * M / 2) / (self.gamma + 1)) **
-            ((self.gamma + 1) / (2 * (self.gamma - 1))) / M
-        )
-        return A_Astar
+        with np.errstate(divide='ignore'):
+            A_ratio = (
+                (2 / self.T_T0(M) / (self.gamma + 1)) **
+                ((self.gamma + 1) / (2 * (self.gamma - 1))) / M
+            )
+        return A_ratio
+
+
+class PrandtlMeyerExpansion(object):
+    """Class representing a Prandtl-Meyer expansion fan.
+
+    Parameters
+    ----------
+    gamma : float, optional
+        Specific heat ratio, default 7 / 5.
+
+    """
+    pass
