@@ -57,7 +57,7 @@ def mach_from_area_ratio(fl, A_ratio):
         return fl.A_ratio(M) - A_ratio
 
     if A_ratio < 1.0:
-        raise ValueError("Area ratio must be greater than 1.")
+        raise ValueError("Area ratio must be greater than 1")
     elif A_ratio == 1.0:
         M_sub = M_sup = 1.0
     else:
@@ -98,7 +98,7 @@ class IsentropicFlow(object):
 
         """
         if np.any(M < 0.0):
-            raise ValueError("Mach number must be positive.")
+            raise ValueError("Mach number must be positive")
 
         T_T0 = 1 / (1 + (self.gamma - 1) * M * M / 2)
         return T_T0
@@ -122,7 +122,7 @@ class IsentropicFlow(object):
 
         """
         if np.any(M < 0.0):
-            raise ValueError("Mach number must be positive.")
+            raise ValueError("Mach number must be positive")
 
         p_p0 = self.T_T0(M) ** (self.gamma / (self.gamma - 1))
         return p_p0
@@ -145,7 +145,7 @@ class IsentropicFlow(object):
 
         """
         if np.any(M < 0.0):
-            raise ValueError("Mach number must be positive.")
+            raise ValueError("Mach number must be positive")
 
         # If there is any zero entry, NumPy array division gives infinity,
         # which is correct.
