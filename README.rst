@@ -69,7 +69,8 @@ Linux with the following versions:
 * Python 2.7, NumPy 1.6, SciPy 0.11
 * Python 3.3, NumPy 1.7.0b2, SciPy 0.11.0
 
-but there is no reason it shouldn't work on Windows or Mac OS X. If you are
+but there is no reason it shouldn't work on Windows or Mac OS X and other
+Python versions newer or equal to 2.5. If you are
 willing to provide testing on this platforms, please
 `contact me <mailto:juanlu001@gmail.com>`_ and if you find any bugs file them
 on the `issue tracker`_.
@@ -77,7 +78,7 @@ on the `issue tracker`_.
 Optional
 --------
 
-For running the tests, `py.test`_ is recommended (see below). The examples are
+For running the tests, `py.test`_ is recommended (see `Testing`_). The examples are
 in `IPython`_ notebook format, so to run them locally you will need a recent
 version of IPython and its dependencies.
 
@@ -112,6 +113,12 @@ scikit-aero recommends py.test for running the test suite. Running from the
 top directory::
 
   $ py.test
+
+To test code coverage, make sure you install `py.test-cov`_ extension and run::
+
+  $ py.test --cov skaero/
+
+.. _`py.test-cov`: https://pypi.python.org/pypi/pytest-cov
 
 Examples
 ========
