@@ -4,7 +4,7 @@ scikit-aero
 :Name: scikit-aero
 :Website: https://github.com/Pybonacci/scikit-aero
 :Author: Juan Luis Cano <juanlu001@gmail.com>
-:Version: 0.2
+:Version: 0.2-dev
 
 scikit-aero is a Python package for various aeronautical engineering
 calculations. It is based on several existing Python packages on the field,
