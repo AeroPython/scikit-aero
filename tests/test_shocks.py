@@ -149,6 +149,14 @@ def test_max_deflection():
             np.radians(beta_theta_max_degrees_list[i]), decimal=3)
 
 
+def test_parallel_shock_infinity_mach():
+    M_1 = np.inf
+    beta = 0.0
+    os = shocks.ObliqueShock(M_1, beta)
+    assert os.M_1n == 0.0
+    assert np.isfinite(os.theta)
+
+
 def test_oblique_shock_from_deflection_angle():
     # Anderson, example 4.1
     # Notice that only graphical accuracy is achieved in the original example

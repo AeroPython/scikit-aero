@@ -62,8 +62,8 @@ def max_deflection(M_1, gamma=1.4):
         os = ObliqueShock(M_1, beta, gamma)
         return -os.theta
 
-    beta_0 = np.radians(50)
-    beta_theta_max, = sp.optimize.fmin(eq, beta_0, args=(M_1, gamma))
+    mu = np.arcsin(1.0 / M_1)
+    beta_theta_max = sp.optimize.fminbound(eq, mu, np.pi / 2, args=(M_1, gamma), disp=0)
     os = ObliqueShock(M_1, beta_theta_max, gamma)
     return os.theta, os.beta
 
@@ -98,7 +98,7 @@ class ObliqueShock(object):
                 raise ValueError("Incident Mach number must be supersonic")
 
         self.M_1 = M_1
-        self.M_1n = M_1 * np.sin(beta)
+        self.M_1n = M_1 * np.sin(beta) if beta != 0.0 else 0.0
         self.beta = beta
         self.gamma = gamma
 
@@ -107,11 +107,15 @@ class ObliqueShock(object):
         """Deflection angle of the shock.
 
         """
-        theta = np.arctan(
-            2 / np.tan(self.beta) *
-            (np.sin(self.beta) ** 2 - 1 / (self.M_1 * self.M_1)) /
-            (self.gamma + np.cos(2 * self.beta) + 2 / (self.M_1 * self.M_1))
-        )
+        if self.beta == 0.0:
+            theta = 0.0
+        else:
+            theta = np.arctan(
+                2 / np.tan(self.beta) *
+                (np.sin(self.beta) ** 2 - 1 / (self.M_1 * self.M_1)) /
+                (self.gamma + np.cos(2 * self.beta) +
+                2 / (self.M_1 * self.M_1))
+            )
         return theta
 
     @property
