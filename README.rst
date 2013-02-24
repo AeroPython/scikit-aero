@@ -59,6 +59,7 @@ Gas dynamics calculations::
   >>> p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
   >>> ns = shocks.NormalShock(M_1=2.5, gamma=1.4)
   >>> M_2 = ns.M_2  # Mach number behind a normal shock wave
+  >>> os = shocks.from_deflection_angle(3.0, np.radians(25), weak=True)  # Known M and deflection angle
 
 Dependencies
 ============
