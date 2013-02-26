@@ -3,12 +3,6 @@
 """
 Shock waves.
 
-The following notation is used:
-
-* `X_1` property X in front of the shock.
-* `X_2` property X behind the shock.
-* `X2_X1` ratio between `X_2` and `X_1`.
-
 Routines
 --------
 from_deflection_angle(M_1, theta, weak=True, gamma=1.4)
