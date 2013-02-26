@@ -29,16 +29,16 @@ import scipy.optimize
 
 
 def from_deflection_angle(M_1, theta, weak=True, gamma=1.4):
-    """Returns oblique shock given incident Mach number and deflection angle.
+    """Returns oblique shock given upstream Mach number and deflection angle.
 
     By default weak solution is selected, unless weak=False is provided.
 
     Parameters
     ----------
     M_1 : float
-        Incident Mach number.
+        Upstream Mach number.
     theta : float
-        Deflection angle.
+        Deflection angle, in radians.
     weak : boolean, optional
         Specifies if weak solution is desired, default to True. Else strong
         solution is returned.
@@ -48,7 +48,7 @@ def from_deflection_angle(M_1, theta, weak=True, gamma=1.4):
     Returns
     -------
     os : ObliqueShock
-        ObliqueShock with desired incident Mach number and resultand angle.
+        ObliqueShock with desired upstream Mach number and resultand angle.
 
     Raises
     ------
@@ -63,7 +63,7 @@ def from_deflection_angle(M_1, theta, weak=True, gamma=1.4):
 
     theta_max, beta_theta_max = max_deflection(M_1)
     if theta > theta_max:
-        raise ValueError("No solution for this deflection angle")
+        raise ValueError("No attached solution for this deflection angle")
     else:
         if weak:
             mu = np.arcsin(1 / M_1)
@@ -83,7 +83,7 @@ def max_deflection(M_1, gamma=1.4):
     Parameters
     ----------
     M_1 : float
-        Incident Mach number.
+        Upstream Mach number.
     gamma : float, optional
         Specific heat ratio, default 7 / 5.
 
@@ -112,16 +112,17 @@ class ObliqueShock(object):
     Parameters
     ----------
     M_1 : float
-        Incident Mach number.
+        Upstream Mach number.
     beta : float
-        Shock wave angle, with respect to the incident velocity, in radians.
+        Shock wave angle, with respect to the upstream velocity, in radians.
     gamma : float, optional
         Specific heat ratio, default 7 / 5.
 
     Raises
     ------
     ValueError
-        If the incident Mach number is less than one.
+        If the upstream Mach number is less than one or the wave angle is lower
+        than the Mach angle.
 
     """
     def __init__(self, M_1, beta, gamma=1.4):
@@ -211,14 +212,14 @@ class NormalShock(ObliqueShock):
     Parameters
     ----------
     M_1 : float
-        Incident Mach number.
+        Upstream Mach number.
     gamma : float, optional
         Specific heat ratio, default 7 / 5.
 
     Raises
     ------
     ValueError
-        If the incident Mach number is less than one.
+        If the upstream Mach number is less than one.
 
     """
     def __init__(self, M_1, gamma=1.4):
