@@ -23,18 +23,12 @@ from skaero.gasdynamics import shocks
 
 
 def test_normal_shock_constructor():
-    """Tests the constructor of the NormalShock class.
-
-    """
     gamma = 1.4
     M_1 = 2.0
     shocks.NormalShock(M_1, gamma)
 
 
-def test_normal_shock_default_adiabatic_index():
-    """Tests default 1.4 value for the adiabatic index.
-
-    """
+def test_normal_shock_default_specific_heat_ratio():
     ns = shocks.NormalShock(2.0)
     np.testing.assert_equal(ns.gamma, 7 / 5)
 
@@ -56,10 +50,7 @@ def test_normal_shock_M_2():
         np.testing.assert_almost_equal(ns_list[i].M_2, M_2_list[i], decimal=4)
 
 
-def test_normal_shock_fails_asubsonic_M_1():
-    """Tests the constructor raises an exception if M_1 <= 1.
-
-    """
+def test_normal_shock_fails_subsonic_M_1():
     with pytest.raises(ValueError):
         shocks.NormalShock(0.8)
 

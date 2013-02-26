@@ -83,9 +83,6 @@ def test_pressure_ratio():
 
 
 def test_area_ratio():
-    """Tests area ratio.
-
-    """
     fl = isentropic.IsentropicFlow(1.4)
     M_list = [0.0, 0.38, 0.79, 1.0, 1.24, 2.14]
     A_ratio_list = [
