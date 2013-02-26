@@ -27,6 +27,8 @@ import numpy as np
 import scipy as sp
 import scipy.optimize
 
+from skaero.gasdynamics.isentropic import mach_angle
+
 
 def from_deflection_angle(M_1, theta, weak=True, gamma=1.4):
     """Returns oblique shock given upstream Mach number and deflection angle.
@@ -66,7 +68,7 @@ def from_deflection_angle(M_1, theta, weak=True, gamma=1.4):
         raise ValueError("No attached solution for this deflection angle")
     else:
         if weak:
-            mu = np.arcsin(1 / M_1)
+            mu = mach_angle(M_1)
             beta = sp.optimize.bisect(
                 eq, mu, beta_theta_max, args=(M_1, theta, gamma))
         else:
@@ -99,7 +101,7 @@ def max_deflection(M_1, gamma=1.4):
         os = ObliqueShock(M_1, beta, gamma)
         return -os.theta
 
-    mu = np.arcsin(1.0 / M_1)
+    mu = mach_angle(M_1)
     beta_theta_max = sp.optimize.fminbound(
         eq, mu, np.pi / 2, args=(M_1, gamma), disp=0)
     os = ObliqueShock(M_1, beta_theta_max, gamma)
@@ -126,15 +128,11 @@ class ObliqueShock(object):
 
     """
     def __init__(self, M_1, beta, gamma=1.4):
-        with np.errstate(invalid='raise'):
-            try:
-                mu = np.arcsin(1.0 / M_1)
-                if beta < mu:
-                    raise ValueError(
-                        "Shock wave angle must be higher "
-                        "than Mach angle {:.2f}°".format(np.degrees(mu)))
-            except FloatingPointError:
-                raise ValueError("Incident Mach number must be supersonic")
+        mu = mach_angle(M_1)
+        if beta < mu:
+            raise ValueError(
+                "Shock wave angle must be higher than Mach angle {:.2f}°"
+                .format(np.degrees(mu)))
 
         self.M_1 = M_1
         self.M_1n = M_1 * np.sin(beta) if beta != 0.0 else 0.0

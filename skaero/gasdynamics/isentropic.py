@@ -5,6 +5,8 @@ Isentropic relations.
 
 Routines
 --------
+mach_angle(M)
+prandtl_meyer_function(M, gamma=1.4)
 mach_from_area_ratio(fl, A_ratio)
 
 Classes
@@ -26,6 +28,65 @@ import scipy as sp
 import scipy.optimize
 
 from skaero import decorators
+
+
+def mach_angle(M):
+    """Returns Mach angle given supersonic Mach number.
+
+    Parameters
+    ----------
+    M : float
+        Mach number.
+
+    Returns
+    -------
+    mu : float
+        Mach angle.
+
+    Raises
+    ------
+    ValueError
+        If given Mach number is subsonic.
+
+    """
+    try:
+        with np.errstate(invalid="raise"):
+            mu = np.arcsin(1 / M)
+    except FloatingPointError:
+        raise ValueError("Mach number must be supersonic")
+    return mu
+
+
+def prandtl_meyer_function(M, gamma=1.4):
+    """Return value of the Prandtl-Meyer function given supersonic Mach number.
+
+    Parameters
+    ----------
+    M : float
+        Mach number.
+    gamma : float, optional
+        Specific heat ratio, default 7 / 5.
+
+    Returns
+    -------
+    nu : float
+        Value of the Prandtl-Meyer function.
+
+    Raises
+    ------
+    ValueError
+        If given Mach number is subsonic.
+
+    """
+    try:
+        with np.errstate(invalid="raise"):
+            sgpgm = np.sqrt((gamma + 1) / (gamma - 1))
+            nu = (
+                sgpgm * np.arctan(np.sqrt(M * M - 1) / sgpgm) -
+                np.arctan(np.sqrt(M * M - 1)))
+    except FloatingPointError:
+        raise ValueError("Mach number must be supersonic")
+    return nu
 
 
 def mach_from_area_ratio(fl, A_ratio):
