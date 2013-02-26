@@ -80,35 +80,8 @@ class IsentropicFlow(object):
         self.gamma = gamma
 
     @decorators.arrayize
-    def T_T0(self, M):
-        """Temperature ratio from Mach number.
-
-        Static tempeature divided by stagnation temperature at the point with
-        given Mach number.
-
-        Parameters
-        ----------
-        M : array_like
-            Mach number.
-
-        Returns
-        -------
-        T_T0 : array_like
-            Temperature ratio.
-
-        """
-        if np.any(M < 0.0):
-            raise ValueError("Mach number must be positive")
-
-        T_T0 = 1 / (1 + (self.gamma - 1) * M * M / 2)
-        return T_T0
-
-    @decorators.arrayize
     def p_p0(self, M):
         """Pressure ratio from Mach number.
-
-        Static pressure divided by stagnation pressure at the point with given
-        Mach number.
 
         Parameters
         ----------
@@ -121,11 +94,44 @@ class IsentropicFlow(object):
             Pressure ratio.
 
         """
-        if np.any(M < 0.0):
-            raise ValueError("Mach number must be positive")
-
         p_p0 = self.T_T0(M) ** (self.gamma / (self.gamma - 1))
         return p_p0
+
+    @decorators.arrayize
+    def rho_rho0(self, M):
+        """Density ratio from Mach number.
+
+        Parameters
+        ----------
+        M : array_like
+            Mach number.
+
+        Returns
+        -------
+        rho_rho0 : array_like
+            Density ratio.
+
+        """
+        rho_rho0 = self.T_T0(M) ** (1 / (self.gamma - 1))
+        return rho_rho0
+
+    @decorators.arrayize
+    def T_T0(self, M):
+        """Temperature ratio from Mach number.
+
+        Parameters
+        ----------
+        M : array_like
+            Mach number.
+
+        Returns
+        -------
+        T_T0 : array_like
+            Temperature ratio.
+
+        """
+        T_T0 = 1 / (1 + (self.gamma - 1) * M * M / 2)
+        return T_T0
 
     @decorators.arrayize
     def A_ratio(self, M):
@@ -144,9 +150,6 @@ class IsentropicFlow(object):
             Area ratio.
 
         """
-        if np.any(M < 0.0):
-            raise ValueError("Mach number must be positive")
-
         # If there is any zero entry, NumPy array division gives infinity,
         # which is correct.
         with np.errstate(divide='ignore'):
