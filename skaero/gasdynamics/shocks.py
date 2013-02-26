@@ -176,16 +176,6 @@ class ObliqueShock(object):
         return M_2
 
     @property
-    def rho2_rho1(self):
-        """Density ratio accross the shock.
-
-        """
-        rho2_rho1 = (
-            (self.gamma + 1) /
-            (2 / (self.M_1n * self.M_1n) + self.gamma - 1))
-        return rho2_rho1
-
-    @property
     def p2_p1(self):
         """Pressure ratio across the shock.
 
@@ -194,6 +184,16 @@ class ObliqueShock(object):
             1 + 2 * self.gamma *
             (self.M_1n * self.M_1n - 1) / (self.gamma + 1))
         return p2_p1
+
+    @property
+    def rho2_rho1(self):
+        """Density ratio accross the shock.
+
+        """
+        rho2_rho1 = (
+            (self.gamma + 1) /
+            (2 / (self.M_1n * self.M_1n) + self.gamma - 1))
+        return rho2_rho1
 
     @property
     def T2_T1(self):
