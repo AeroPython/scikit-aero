@@ -9,7 +9,7 @@ Data from `NACA 1135 Report`_.
 
 """
 
-from __future__ import division
+from __future__ import division, absolute_import
 
 import numpy as np
 import numpy.testing

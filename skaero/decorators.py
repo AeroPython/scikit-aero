@@ -5,6 +5,8 @@ Decorators for multiple purposes.
 
 """
 
+from __future__ import division, absolute_import
+
 from functools import wraps
 
 import numpy as np

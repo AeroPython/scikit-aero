@@ -19,7 +19,7 @@ TODO
 
 """
 
-from __future__ import print_function
+from __future__ import division, absolute_import
 
 import numpy as np
 import scipy as sp
@@ -31,7 +31,6 @@ from skaero.atmosphere import coesa
 
 # Load data from PDAS atmos
 data = np.loadtxt('tests/si2py.prt', skiprows=2)
-print(data)
 
 
 def test_sea_level():

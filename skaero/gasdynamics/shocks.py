@@ -27,7 +27,7 @@ Examples
 
 """
 
-from __future__ import division
+from __future__ import division, absolute_import
 
 import numpy as np
 import scipy as sp
