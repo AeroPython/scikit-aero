@@ -85,7 +85,7 @@ def test_pressure_ratio():
 def test_area_ratio():
     fl = isentropic.IsentropicFlow(1.4)
     M_list = [0.0, 0.38, 0.79, 1.0, 1.24, 2.14]
-    A_ratio_list = [
+    A_Astar_list = [
         np.infty,
         1.6587,
         1.0425,
@@ -94,9 +94,10 @@ def test_area_ratio():
         1.902
     ]
     np.testing.assert_array_almost_equal(
-        fl.A_ratio(M_list), A_ratio_list, decimal=3
+        fl.A_Astar(M_list), A_Astar_list, decimal=3
     )
 
 
 def test_area_ratio_no_zero_division_error():
-    pass
+    fl = isentropic.IsentropicFlow()
+    assert np.isposinf(fl.A_Astar(0))

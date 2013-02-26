@@ -7,7 +7,7 @@ Routines
 --------
 mach_angle(M)
 prandtl_meyer_function(M, gamma=1.4)
-mach_from_area_ratio(fl, A_ratio)
+mach_from_area_ratio(fl, A_Astar)
 
 Classes
 -------
@@ -89,7 +89,7 @@ def prandtl_meyer_function(M, gamma=1.4):
     return nu
 
 
-def mach_from_area_ratio(fl, A_ratio):
+def mach_from_area_ratio(fl, A_Astar):
     """Computes the Mach number given an area ratio asuming isentropic flow.
 
     Uses the relation between Mach number and area ratio for isentropic flow,
@@ -99,7 +99,7 @@ def mach_from_area_ratio(fl, A_ratio):
     ----------
     fl : IsentropicFlow
         Isentropic flow object.
-    A_ratio : float
+    A_Astar : float
         Cross sectional area.
 
     Returns
@@ -114,16 +114,16 @@ def mach_from_area_ratio(fl, A_ratio):
         minimum).
 
     """
-    def eq(M, fl, A_ratio):
-        return fl.A_ratio(M) - A_ratio
+    def eq(M, fl, A_Astar):
+        return fl.A_Astar(M) - A_Astar
 
-    if A_ratio < 1.0:
+    if A_Astar < 1.0:
         raise ValueError("Area ratio must be greater than 1")
-    elif A_ratio == 1.0:
+    elif A_Astar == 1.0:
         M_sub = M_sup = 1.0
     else:
-        M_sub = sp.optimize.bisect(eq, 0.0, 1.0, args=(fl, A_ratio))
-        M_sup = sp.optimize.newton(eq, 2.0, args=(fl, A_ratio))
+        M_sub = sp.optimize.bisect(eq, 0.0, 1.0, args=(fl, A_Astar))
+        M_sup = sp.optimize.newton(eq, 2.0, args=(fl, A_Astar))
 
     return M_sub, M_sup
 
@@ -195,7 +195,7 @@ class IsentropicFlow(object):
         return T_T0
 
     @decorators.arrayize
-    def A_ratio(self, M):
+    def A_Astar(self, M):
         """Area ratio from Mach number.
 
         Duct area divided by critial area given Mach number.
@@ -207,18 +207,18 @@ class IsentropicFlow(object):
 
         Returns
         -------
-        A_ratio : array_like
+        A_Astar : array_like
             Area ratio.
 
         """
         # If there is any zero entry, NumPy array division gives infinity,
         # which is correct.
         with np.errstate(divide='ignore'):
-            A_ratio = (
+            A_Astar = (
                 (2 / self.T_T0(M) / (self.gamma + 1)) **
                 ((self.gamma + 1) / (2 * (self.gamma - 1))) / M
             )
-        return A_ratio
+        return A_Astar
 
 
 class PrandtlMeyerExpansion(object):
