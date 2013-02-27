@@ -57,38 +57,6 @@ def mach_angle(M):
     return mu
 
 
-def prandtl_meyer_function(M, gamma=1.4):
-    """Return value of the Prandtl-Meyer function given supersonic Mach number.
-
-    Parameters
-    ----------
-    M : float
-        Mach number.
-    gamma : float, optional
-        Specific heat ratio, default 7 / 5.
-
-    Returns
-    -------
-    nu : float
-        Value of the Prandtl-Meyer function.
-
-    Raises
-    ------
-    ValueError
-        If given Mach number is subsonic.
-
-    """
-    try:
-        with np.errstate(invalid="raise"):
-            sgpgm = np.sqrt((gamma + 1) / (gamma - 1))
-            nu = (
-                sgpgm * np.arctan(np.sqrt(M * M - 1) / sgpgm) -
-                np.arctan(np.sqrt(M * M - 1)))
-    except FloatingPointError:
-        raise ValueError("Mach number must be supersonic")
-    return nu
-
-
 def mach_from_area_ratio(fl, A_Astar):
     """Computes the Mach number given an area ratio asuming isentropic flow.
 
@@ -226,8 +194,73 @@ class PrandtlMeyerExpansion(object):
 
     Parameters
     ----------
+    M_1 : float
+        Upstream Mach number.
+    nu : float
+        Deflection angle, in radians.
     gamma : float, optional
         Specific heat ratio, default 7 / 5.
 
+    Raises
+    ------
+    ValueError
+        If given Mach number is subsonic.
+
+    TODO
+    ----
+    * What does the relationship with the IsentropicFlow class look like?
+    * Tests.
+
     """
-    pass
+    @staticmethod
+    def nu(M, gamma=1.4):
+        """Turn angle given Mach number.
+
+        The result is given by evaluating the Prandtl-Meyer function.
+
+        Parameters
+        ----------
+        M : float
+            Mach number.
+        gamma : float, optional.
+            Specific heat ratio, default 7 / 5.
+
+        Returns
+        -------
+        nu : float
+            Turn angle, in radians.
+
+        Raises
+        ------
+        ValueError
+            If Mach number is subsonic.
+
+        """
+        try:
+            with np.errstate(invalid="raise"):
+                sgpgm = np.sqrt((gamma + 1) / (gamma - 1))
+                nu = (
+                    sgpgm * np.arctan(np.sqrt(M * M - 1) / sgpgm) -
+                    np.arctan(np.sqrt(M * M - 1)))
+        except FloatingPointError:
+            raise ValueError("Mach number must be supersonic")
+        return nu
+
+    def __init__(self, M_1, nu, gamma=1.4):
+        nu_max = (
+            PrandtlMeyerExpansion.nu(np.inf, gamma) -
+            PrandtlMeyerExpansion.nu(M_1, gamma))
+        if nu > nu_max:
+            raise ValueError(
+                "Deflection angle must be lower than maximum {:.2f}°"
+                .format(np.degrees(nu_max)))
+        self.M_1 = M_1
+        self.nu = nu
+        self.gamma = gamma
+
+    @property
+    def M_2(self):
+        """Downstream Mach number.
+
+        """
+        raise NotImplementedError

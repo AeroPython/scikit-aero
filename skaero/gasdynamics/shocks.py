@@ -225,7 +225,7 @@ class NormalShock(ObliqueShock):
 
     def __repr__(self):
         return ("NormalShock(M_1={0!r}, "
-                "gamma={2!r})".format(self.M_1, self.beta, self.gamma))
+                "gamma={1!r})".format(self.M_1, self.gamma))
 
     @property
     def theta(self):
