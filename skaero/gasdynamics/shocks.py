@@ -30,52 +30,8 @@ import scipy.optimize
 from skaero.gasdynamics.isentropic import mach_angle
 
 
-def from_deflection_angle(M_1, theta, weak=True, gamma=1.4):
-    """Returns oblique shock given upstream Mach number and deflection angle.
-
-    By default weak solution is selected, unless weak=False is provided.
-
-    Parameters
-    ----------
-    M_1 : float
-        Upstream Mach number.
-    theta : float
-        Deflection angle, in radians.
-    weak : boolean, optional
-        Specifies if weak solution is desired, default to True. Else strong
-        solution is returned.
-    gamma : float, optional
-        Specific heat ratio, default 7 / 5.
-
-    Returns
-    -------
-    os : ObliqueShock
-        ObliqueShock with desired upstream Mach number and resultand angle.
-
-    Raises
-    ------
-    ValueError
-        If the deflection angle is higher than the maximum and therefore there
-        is no solution.
-
-    """
-    def eq(beta, M_1, theta, gamma):
-        os = ObliqueShock(M_1, beta, gamma)
-        return os.theta - theta
-
-    theta_max, beta_theta_max = max_deflection(M_1)
-    if theta > theta_max:
-        raise ValueError("No attached solution for this deflection angle")
-    else:
-        if weak:
-            mu = mach_angle(M_1)
-            beta = sp.optimize.bisect(
-                eq, mu, beta_theta_max, args=(M_1, theta, gamma))
-        else:
-            beta = sp.optimize.bisect(
-                eq, beta_theta_max, np.pi / 2, args=(M_1, theta, gamma))
-
-    return ObliqueShock(M_1, beta, gamma)
+# Exceptions used in this module
+class InvalidParametersError(Exception): pass
 
 
 def max_deflection(M_1, gamma=1.4):
@@ -98,33 +54,76 @@ def max_deflection(M_1, gamma=1.4):
 
     """
     def eq(beta, M_1, gamma):
-        os = ObliqueShock(M_1, beta, gamma)
+        os = _ShockClass(M_1, beta, gamma)
         return -os.theta
 
     mu = mach_angle(M_1)
     beta_theta_max = sp.optimize.fminbound(
         eq, mu, np.pi / 2, args=(M_1, gamma), disp=0)
-    os = ObliqueShock(M_1, beta_theta_max, gamma)
+    os = _ShockClass(M_1, beta_theta_max, gamma)
     return os.theta, os.beta
 
 
-class ObliqueShock(object):
-    """Class representing an oblique shock.
+def _ShockFactory(**kwargs):
+    """Returns an object representing a shock wave.
 
-    Parameters
-    ----------
-    M_1 : float
-        Upstream Mach number.
-    beta : float
-        Shock wave angle, with respect to the upstream velocity, in radians.
-    gamma : float, optional
-        Specific heat ratio, default 7 / 5.
+    Examples
+    --------
+    >>> ss1 = Shock(M_1=1.5)  # Given upstream Mach number (default beta = 90°)
+    >>> ss1.M_2
+    0.70108874169309943
+    >>> ss1.beta
+    1.5707963267948966
+    >>> ss1.theta
+    0.0
+    >>> ss2 = Shock(M_1=3.0, theta=np.radians(20.0), weak=True)
+    >>> ss2.beta  # Notice it is an oblique shock
+    0.6590997534071927
 
-    Raises
-    ------
-    ValueError
-        If the upstream Mach number is less than one or the wave angle is lower
-        than the Mach angle.
+    """
+    methods = {
+        frozenset(['M_1']): _ShockClass,
+        frozenset(['M_1', 'theta']): _from_deflection_angle,
+        frozenset(['M_1', 'theta', 'weak']): _from_deflection_angle
+    }
+    beta = kwargs.pop('beta', np.pi / 2)
+    gamma = kwargs.pop('gamma', 1.4)
+    params = frozenset(kwargs.keys())
+    try:
+        shock = methods[params](beta=beta, gamma=gamma, **kwargs)
+    except KeyError:
+        raise InvalidParametersError("Invalid list of parameters")
+    return shock
+
+
+Shock = _ShockFactory
+
+
+def _from_deflection_angle(M_1, theta, weak=True, gamma=1.4, **kwargs):
+    """Returns oblique shock given upstream Mach number and deflection angle.
+
+    """
+    def eq(beta, M_1, theta, gamma):
+        os = _ShockClass(M_1, beta, gamma)
+        return os.theta - theta
+
+    theta_max, beta_theta_max = max_deflection(M_1)
+    if theta > theta_max:
+        raise ValueError("No attached solution for this deflection angle")
+    else:
+        if weak:
+            mu = mach_angle(M_1)
+            beta = sp.optimize.bisect(
+                eq, mu, beta_theta_max, args=(M_1, theta, gamma))
+        else:
+            beta = sp.optimize.bisect(
+                eq, beta_theta_max, np.pi / 2, args=(M_1, theta, gamma))
+
+    return _ShockClass(M_1, beta, gamma)
+
+
+class _ShockClass(object):
+    """Class representing a shock.
 
     """
     def __init__(self, M_1, beta, gamma=1.4):
@@ -140,7 +139,8 @@ class ObliqueShock(object):
         self.gamma = gamma
 
     def __repr__(self):
-        return ("ObliqueShock(M_1={0!r}, beta={1!r}, "
+        # FIXME: What if the object is returned from different parameters?
+        return ("Shock(M_1={0!r}, beta={1!r}, "
                 "gamma={2!r})".format(self.M_1, self.beta, self.gamma))
 
     @property
@@ -148,7 +148,7 @@ class ObliqueShock(object):
         """Deflection angle of the shock.
 
         """
-        if self.beta == 0.0:
+        if self.beta == 0.0 or self.beta == np.pi / 2:
             theta = 0.0
         else:
             theta = np.arctan(
@@ -202,34 +202,3 @@ class ObliqueShock(object):
         """
         T2_T1 = self.p2_p1 / self.rho2_rho1
         return T2_T1
-
-
-class NormalShock(ObliqueShock):
-    """Class representing a normal shock.
-
-    Parameters
-    ----------
-    M_1 : float
-        Upstream Mach number.
-    gamma : float, optional
-        Specific heat ratio, default 7 / 5.
-
-    Raises
-    ------
-    ValueError
-        If the upstream Mach number is less than one.
-
-    """
-    def __init__(self, M_1, gamma=1.4):
-        super(NormalShock, self).__init__(M_1, np.pi / 2, gamma)
-
-    def __repr__(self):
-        return ("NormalShock(M_1={0!r}, "
-                "gamma={1!r})".format(self.M_1, self.gamma))
-
-    @property
-    def theta(self):
-        """Deflection angle of the shock.
-
-        """
-        return 0.0

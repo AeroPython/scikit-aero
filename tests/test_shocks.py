@@ -25,11 +25,11 @@ from skaero.gasdynamics import shocks
 def test_normal_shock_constructor():
     gamma = 1.4
     M_1 = 2.0
-    shocks.NormalShock(M_1, gamma)
+    shocks.Shock(M_1=M_1, gamma=gamma)
 
 
 def test_normal_shock_default_specific_heat_ratio():
-    ns = shocks.NormalShock(2.0)
+    ns = shocks.Shock(M_1=2.0)
     np.testing.assert_equal(ns.gamma, 7 / 5)
 
 
@@ -44,7 +44,7 @@ def test_normal_shock_M_2():
         0.5613,
         0.4752
     ]
-    ns_list = [shocks.NormalShock(M_1, 1.4) for M_1 in M_1_list]
+    ns_list = [shocks.Shock(M_1=M_1, gamma=1.4) for M_1 in M_1_list]
 
     for i in range(len(ns_list)):
         np.testing.assert_almost_equal(ns_list[i].M_2, M_2_list[i], decimal=4)
@@ -52,7 +52,7 @@ def test_normal_shock_M_2():
 
 def test_normal_shock_fails_subsonic_M_1():
     with pytest.raises(ValueError):
-        shocks.NormalShock(0.8)
+        shocks.Shock(M_1=0.8)
 
 
 def test_normal_shock_ratios():
@@ -78,7 +78,7 @@ def test_normal_shock_ratios():
         1.7705,
         2.6790
     ]
-    ns_list = [shocks.NormalShock(M_1, 1.4) for M_1 in M_1_list]
+    ns_list = [shocks.Shock(M_1=M_1, gamma=1.4) for M_1 in M_1_list]
 
     for i in range(len(ns_list)):
         np.testing.assert_almost_equal(
@@ -91,7 +91,7 @@ def test_normal_shock_ratios():
 
 def test_normal_shock_infinite_limit():
     gamma = 1.4
-    ns = shocks.NormalShock(np.inf, gamma)
+    ns = shocks.Shock(M_1=np.inf, gamma=gamma)
     np.testing.assert_almost_equal(
         ns.M_2, np.sqrt((gamma - 1) / 2 / gamma), decimal=3)
     np.testing.assert_almost_equal(
@@ -99,18 +99,18 @@ def test_normal_shock_infinite_limit():
 
 
 def test_normal_shock_zero_deflection():
-    ns = shocks.NormalShock(2.0)
+    ns = shocks.Shock(M_1=2.0)
     assert ns.theta == 0.0
 
 
 def test_error_max_deflection():
     with pytest.raises(ValueError):
-        shocks.from_deflection_angle(5, np.radians(50))
+        shocks.Shock(M_1=5, theta=np.radians(50))
 
 
 def test_error_mach_angle():
     with pytest.raises(ValueError):
-        shocks.ObliqueShock(5, np.radians(10))
+        shocks.Shock(M_1=5, beta=np.radians(10))
 
 
 def test_max_deflection():
@@ -143,7 +143,7 @@ def test_max_deflection():
 def test_parallel_shock_infinity_mach():
     M_1 = np.inf
     beta = 0.0
-    os = shocks.ObliqueShock(M_1, beta)
+    os = shocks.Shock(M_1=M_1, beta=beta)
     assert os.M_1n == 0.0
     assert np.isfinite(os.theta)
 
@@ -153,7 +153,7 @@ def test_oblique_shock_from_deflection_angle():
     # Notice that only graphical accuracy is achieved in the original example
     M_1 = 3.0
     theta = np.radians(20.0)
-    os = shocks.from_deflection_angle(M_1, theta, weak=True)
+    os = shocks.Shock(M_1=M_1, theta=theta, weak=True)
 
     np.testing.assert_almost_equal(os.M_1n, 1.839, decimal=2)
     np.testing.assert_almost_equal(os.M_2n, 0.6078, decimal=2)
