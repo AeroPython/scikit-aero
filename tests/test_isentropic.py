@@ -50,7 +50,7 @@ def test_pm_function():
         130.45
     ]
     results_list = [
-        isentropic.prandtl_meyer_function(M, gamma) for M in M_list]
+        isentropic.PrandtlMeyerExpansion.nu(M, gamma) for M in M_list]
     for i in range(len(M_list)):
         np.testing.assert_almost_equal(
             results_list[i], np.radians(nu_list[i]), decimal=3)
@@ -58,7 +58,7 @@ def test_pm_function():
 
 def test_pm_function_raises_error_subsonic():
     with pytest.raises(ValueError):
-        isentropic.prandtl_meyer_function(0.8)
+        isentropic.PrandtlMeyerExpansion.nu(0.8)
 
 
 def test_isentropic_flow_constructor():
