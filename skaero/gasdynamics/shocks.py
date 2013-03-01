@@ -5,23 +5,24 @@ Shock waves.
 
 Routines
 --------
-from_deflection_angle(M_1, theta, weak=True, gamma=1.4)
 max_deflection(M_1, gamma=1.4)
+Shock(**kwargs)
 
-Classes
--------
-NormalShock(M_1, gamma)
-ObliqueShock(M_1, beta, gamma)
+The important piece of the module is `Shock`, which returns a shock object
+from a variety of combinations of parameters. For more information and
+examples, see the docstring of `Shock`.
 
 Examples
 --------
 >>> from skaero.gasdynamics import shocks
->>> ns = shocks.NormalShock(2.0, gamma=1.4) # Normal shock with M_1 = 2.0
->>> shocks.from_deflection_angle(3.0, np.radians(25), weak=True)
+>>> ns = shocks.Shock(M_1=2.0, gamma=1.4)  # Normal shock by default
+>>> shocks.Shock(M_1=3.0, theta=np.radians(25), weak=True)
 
 """
 
 from __future__ import division, absolute_import
+
+import inspect
 
 import numpy as np
 import scipy as sp
@@ -67,6 +68,11 @@ def max_deflection(M_1, gamma=1.4):
 def _ShockFactory(**kwargs):
     """Returns an object representing a shock wave.
 
+    Parameters
+    ----------
+    gamma : float, optional
+        Specific heat ratio, default 7 / 5.
+
     Examples
     --------
     >>> ss1 = Shock(M_1=1.5)  # Given upstream Mach number (default beta = 90°)
@@ -80,26 +86,63 @@ def _ShockFactory(**kwargs):
     >>> ss2.beta  # Notice it is an oblique shock
     0.6590997534071927
 
+    TODO
+    ----
+    * This is a list of possible cases
+
+      * M_1(, beta=np.pi / 2) -> _ShockClass(M_1, beta) (only direct case)
+      * M_2(, beta=np.pi / 2)
+      * p2_p1(, beta=np.pi / 2)
+      * ...
+      * M_1, theta(, weak=True)
+      * M_2, theta(, weak=True)
+      * p2_p1, theta(, weak=True)
+
     """
-    methods = {
-        frozenset(['M_1']): _ShockClass,
-        frozenset(['M_1', 'theta']): _from_deflection_angle,
-        frozenset(['M_1', 'theta', 'weak']): _from_deflection_angle
-    }
-    beta = kwargs.pop('beta', np.pi / 2)
-    gamma = kwargs.pop('gamma', 1.4)
-    params = frozenset(kwargs.keys())
+    kwargs.setdefault('gamma', 1.4)
     try:
-        shock = methods[params](beta=beta, gamma=gamma, **kwargs)
+        # We want a view of the keys, but the syntax changed in Python 3
+        params = kwargs.viewkeys()
+    except AttributeError:
+        params = kwargs.keys()
+    if not 'theta' in params:
+        kwargs.setdefault('beta', np.pi / 2)
+        # ['X', 'beta', 'gamma']
+        if len(params) != 3:
+            raise InvalidParametersError("Invalid list of parameters")
+    else:
+        if 'beta' in params:
+            raise InvalidParametersError("Invalid list of parameters")
+        kwargs.setdefault('weak', True)
+        # ['X', 'theta', 'weak', 'gamma']
+        if len(params) != 4:
+            raise InvalidParametersError("Invalid list of parameters")
+
+    # Here is the list of available resolution methods
+    methods_list = [
+        _from_deflection_angle
+    ]
+
+    # And we generate a dictionary from it, indexed by their call arguments
+    methods = {
+        frozenset(inspect.getargspec(f)[0]): f
+        for f in methods_list}
+    # HACK, see http://stackoverflow.com/a/3999604/554319
+    _k_class = (
+        frozenset(inspect.getargspec(_ShockClass.__init__)[0]) - set(['self']))
+    methods[_k_class] = _ShockClass
+    try:
+        call_sig = frozenset(params)
+        shock = methods[call_sig](**kwargs)
     except KeyError:
-        raise InvalidParametersError("Invalid list of parameters")
+        raise NotImplementedError
     return shock
 
 
 Shock = _ShockFactory
 
 
-def _from_deflection_angle(M_1, theta, weak=True, gamma=1.4, **kwargs):
+def _from_deflection_angle(M_1, theta, weak, gamma):
     """Returns oblique shock given upstream Mach number and deflection angle.
 
     """
@@ -126,7 +169,7 @@ class _ShockClass(object):
     """Class representing a shock.
 
     """
-    def __init__(self, M_1, beta, gamma=1.4):
+    def __init__(self, M_1, beta, gamma):
         mu = mach_angle(M_1)
         if beta < mu:
             raise ValueError(
@@ -148,7 +191,7 @@ class _ShockClass(object):
         """Deflection angle of the shock.
 
         """
-        if self.beta == 0.0 or self.beta == np.pi / 2:
+        if self.beta == mach_angle(self.M_1) or self.beta == np.pi / 2:
             theta = 0.0
         else:
             theta = np.arctan(
@@ -161,6 +204,7 @@ class _ShockClass(object):
     def M_2n(self):
         """Normal Mach number behind the shock.
 
+        FIXME: Raises ZeroDivisionError if M_1n == 0.0. Consistent?
         """
         M_2n = np.sqrt(
             (1 / (self.M_1n * self.M_1n) + (self.gamma - 1) / 2) /
