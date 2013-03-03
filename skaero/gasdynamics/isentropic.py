@@ -16,8 +16,8 @@ IsentropicFlow(gamma)
 Examples
 --------
 >>> from skaero.gasdynamics import isentropic
->>> fl = Isentropic(gamma=1.4)
->>> _, M = isentropic.mach_from_area_ratio(fl, 2.5)
+>>> fl = IsentropicFlow(gamma=1.4)
+>>> _, M = isentropic.mach_from_area_ratio(2.5, fl)
 
 """
 
@@ -27,7 +27,7 @@ import numpy as np
 import scipy as sp
 import scipy.optimize
 
-from skaero.utils.decorators import method_decorator
+from skaero.utils.decorators import implicit, method_decorator
 
 
 def mach_angle(M):
@@ -57,7 +57,7 @@ def mach_angle(M):
     return mu
 
 
-def mach_from_area_ratio(fl, A_Astar):
+def mach_from_area_ratio(A_Astar, fl=None):
     """Computes the Mach number given an area ratio asuming isentropic flow.
 
     Uses the relation between Mach number and area ratio for isentropic flow,
@@ -65,10 +65,10 @@ def mach_from_area_ratio(fl, A_Astar):
 
     Parameters
     ----------
-    fl : IsentropicFlow
-        Isentropic flow object.
     A_Astar : float
         Cross sectional area.
+    fl : IsentropicFlow, optional
+        Isentropic flow object, default flow with gamma = 7 / 5.
 
     Returns
     -------
@@ -82,16 +82,16 @@ def mach_from_area_ratio(fl, A_Astar):
         minimum).
 
     """
-    def eq(M, fl, A_Astar):
-        return fl.A_Astar(M) - A_Astar
-
+    if not fl:
+        fl = IsentropicFlow(gamma=1.4)
+    eq = implicit(fl.A_Astar)
     if A_Astar < 1.0:
         raise ValueError("Area ratio must be greater than 1")
     elif A_Astar == 1.0:
         M_sub = M_sup = 1.0
     else:
-        M_sub = sp.optimize.bisect(eq, 0.0, 1.0, args=(fl, A_Astar))
-        M_sup = sp.optimize.newton(eq, 2.0, args=(fl, A_Astar))
+        M_sub = sp.optimize.bisect(eq, 0.0, 1.0, args=(A_Astar,))
+        M_sup = sp.optimize.newton(eq, 2.0, args=(A_Astar,))
 
     return M_sub, M_sup
 

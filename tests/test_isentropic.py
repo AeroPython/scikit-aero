@@ -101,3 +101,32 @@ def test_area_ratio():
 def test_area_ratio_no_zero_division_error():
     fl = isentropic.IsentropicFlow()
     assert np.isposinf(fl.A_Astar(0))
+
+
+def test_mach_from_area_ratio_raises_error_ratio_greater_1():
+    with pytest.raises(ValueError):
+        isentropic.mach_from_area_ratio(0.8)
+
+
+def test_mach_from_area_ratio_subsonic():
+    fl = isentropic.IsentropicFlow(1.4)
+    A_Astar_list = [
+        np.inf,
+        2.4027,
+        1.7780,
+        1.0382,
+        1.0,
+    ]
+    M_sub_list = [
+        0.0,
+        0.25,
+        0.35,
+        0.8,
+        1.0
+    ]
+    results_list = [
+        isentropic.mach_from_area_ratio(A_Astar, fl)[0]
+        for A_Astar in A_Astar_list]
+    for i in range(len(A_Astar_list)):
+        np.testing.assert_almost_equal(
+            results_list[i], M_sub_list[i], decimal=3)
