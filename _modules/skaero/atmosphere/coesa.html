@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>skaero.atmosphere.coesa &mdash; scikit-aero 0.2-dev documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/solar.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="scikit-aero 0.2-dev documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /><link href='http://fonts.googleapis.com/css?family=Source+Code+Pro|Open+Sans:300italic,400italic,700italic,400,300,700' rel='stylesheet' type='text/css'>
+<link href="../../../_static/solarized-dark.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">scikit-aero 0.2-dev documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for skaero.atmosphere.coesa</h1><div class="highlight"><pre>
+<span class="c"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">COESA model.</span>
+
+<span class="sd">Routines</span>
+<span class="sd">--------</span>
+<span class="sd">geometric_to_geopotential(z)</span>
+<span class="sd">coesa(h)</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+<span class="sd">&gt;&gt;&gt; from skaero.atmosphere import coesa</span>
+<span class="sd">&gt;&gt;&gt; h, T, p, rho = coesa.table(1000)</span>
+
+<span class="sd">TODO</span>
+<span class="sd">----</span>
+<span class="sd">* Check geopotential temperature</span>
+<span class="sd">* Move to OOP</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">R_Earth</span> <span class="o">=</span> <span class="mf">6369.0e3</span>  <span class="c"># m</span>
+
+<span class="n">g_0p</span> <span class="o">=</span> <span class="mf">9.80665</span>  <span class="c"># m / s^2</span>
+<span class="n">M_0</span> <span class="o">=</span> <span class="mf">28.9644e-3</span>  <span class="c"># kg / mol</span>
+<span class="n">Rs</span> <span class="o">=</span> <span class="mf">8.31432</span>  <span class="c"># N m / (mol K)</span>
+
+
+<div class="viewcode-block" id="geometric_to_geopotential"><a class="viewcode-back" href="../../../api.html#skaero.atmosphere.coesa.geometric_to_geopotential">[docs]</a><span class="k">def</span> <span class="nf">geometric_to_geopotential</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns geopotential altitude from geometric altitude.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    z : array_like</span>
+<span class="sd">        Geometric altitude in meters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    h : array_like</span>
+<span class="sd">        Geopotential altitude in meters.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="n">R_Earth</span> <span class="o">/</span> <span class="p">(</span><span class="n">z</span> <span class="o">+</span> <span class="n">R_Earth</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">h</span>
+
+</div>
+<div class="viewcode-block" id="table"><a class="viewcode-back" href="../../../api.html#skaero.atmosphere.coesa.table">[docs]</a><span class="k">def</span> <span class="nf">table</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes table of COESA atmosphere properties.</span>
+
+<span class="sd">    Returns temperature, pressure and density COESA values at the given</span>
+<span class="sd">    geopotential altitude.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : array_like</span>
+<span class="sd">       Geopotential altitude given in meters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    h : array_like</span>
+<span class="sd">        Given geopotential altitude in meters.</span>
+<span class="sd">    T : array_like</span>
+<span class="sd">        Temperature in Kelvin.</span>
+<span class="sd">    p : array_like</span>
+<span class="sd">        Pressure in Pascal.</span>
+<span class="sd">    rho : array_like</span>
+<span class="sd">        Density in kilograms per cubic meter.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Based on the `U.S. 1976 Standard Atmosphere`_.</span>
+
+<span class="sd">    .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539_1977009539.pdf</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># FIXME: Having these variables here feels like a total hack for me,</span>
+    <span class="c"># and will be worse as soon as I add more layers. I need another module,</span>
+    <span class="c"># or a class, or something.</span>
+    <span class="n">h_0</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c"># m</span>
+    <span class="n">T_0</span> <span class="o">=</span> <span class="mf">288.150</span>  <span class="c"># K</span>
+    <span class="n">p_0</span> <span class="o">=</span> <span class="mf">101325.0</span>  <span class="c"># Pa</span>
+    <span class="n">L_0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.5e-3</span>  <span class="c"># K / m</span>
+
+    <span class="c"># Is this actually molecular-scale temperature?</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">T_0</span> <span class="o">+</span> <span class="n">L_0</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="n">h_0</span><span class="p">)</span>  <span class="c"># Linear relation for 0 &lt; h &lt; 11000</span>
+    <span class="c"># TODO: Maybe use pressure ratio to be consistent w/ the COESA standard.</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">p_0</span> <span class="o">*</span> <span class="p">(</span><span class="n">T_0</span> <span class="o">/</span> <span class="p">(</span><span class="n">T_0</span> <span class="o">+</span> <span class="n">L_0</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">-</span> <span class="n">h_0</span><span class="p">)))</span> <span class="o">**</span> <span class="p">(</span><span class="n">g_0p</span> <span class="o">*</span> <span class="n">M_0</span> <span class="o">/</span> <span class="p">(</span><span class="n">Rs</span> <span class="o">*</span> <span class="n">L_0</span><span class="p">))</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">p</span> <span class="o">*</span> <span class="n">M_0</span> <span class="o">/</span> <span class="p">(</span><span class="n">Rs</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">h</span><span class="p">,</span>
+        <span class="n">T</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">,</span>
+        <span class="n">rho</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">scikit-aero 0.2-dev documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Juan Luis Cano.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.Theme by <a href="http://github.com/vkvn">vkvn</a>
+    </div>
+  </body>
+</html>

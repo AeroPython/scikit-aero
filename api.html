@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Reference &mdash; scikit-aero 0.2-dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/solar.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="scikit-aero 0.2-dev documentation" href="index.html" />
+    <link rel="prev" title="scikit-aero" href="index.html" /><link href='http://fonts.googleapis.com/css?family=Source+Code+Pro|Open+Sans:300italic,400italic,700italic,400,300,700' rel='stylesheet' type='text/css'>
+<link href="_static/solarized-dark.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="scikit-aero"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">scikit-aero 0.2-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#module-skaero.gasdynamics.isentropic">Isentropic</a><ul>
+<li><a class="reference internal" href="#routines">Routines</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-skaero.gasdynamics.shocks">Shocks</a><ul>
+<li><a class="reference internal" href="#id1">Routines</a></li>
+<li><a class="reference internal" href="#id4">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-skaero.atmosphere.coesa">Atmosphere</a><ul>
+<li><a class="reference internal" href="#id5">Routines</a></li>
+<li><a class="reference internal" href="#id6">Examples</a></li>
+<li><a class="reference internal" href="#todo">TODO</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">scikit-aero</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<p>Complete reference of the API.</p>
+<div class="section" id="module-skaero.gasdynamics.isentropic">
+<span id="isentropic"></span><h2>Isentropic<a class="headerlink" href="#module-skaero.gasdynamics.isentropic" title="Permalink to this headline">¶</a></h2>
+<p>Isentropic relations.</p>
+<div class="section" id="routines">
+<h3>Routines<a class="headerlink" href="#routines" title="Permalink to this headline">¶</a></h3>
+<p>mach_angle(M)
+prandtl_meyer_function(M, gamma=1.4)
+mach_from_area_ratio(fl, A_Astar)</p>
+</div>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<p>IsentropicFlow(gamma)</p>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skaero.gasdynamics</span> <span class="kn">import</span> <span class="n">isentropic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fl</span> <span class="o">=</span> <span class="n">Isentropic</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mf">1.4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span><span class="p">,</span> <span class="n">M</span> <span class="o">=</span> <span class="n">isentropic</span><span class="o">.</span><span class="n">mach_from_area_ratio</span><span class="p">(</span><span class="n">fl</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="skaero.gasdynamics.isentropic.IsentropicFlow">
+<em class="property">class </em><tt class="descclassname">skaero.gasdynamics.isentropic.</tt><tt class="descname">IsentropicFlow</tt><big>(</big><em>gamma=1.4</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#IsentropicFlow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.IsentropicFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing an isentropic flow.</p>
+<dl class="docutils">
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd>Specific heat ratio, default 7 / 5.</dd>
+</dl>
+<dl class="method">
+<dt id="skaero.gasdynamics.isentropic.IsentropicFlow.A_Astar">
+<tt class="descname">A_Astar</tt><big>(</big><em>x</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#IsentropicFlow.A_Astar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.IsentropicFlow.A_Astar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Area ratio from Mach number.</p>
+<p>Duct area divided by critial area given Mach number.</p>
+<dl class="docutils">
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Mach number.</dd>
+</dl>
+<dl class="docutils">
+<dt>A_Astar <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Area ratio.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skaero.gasdynamics.isentropic.IsentropicFlow.T_T0">
+<tt class="descname">T_T0</tt><big>(</big><em>x</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#IsentropicFlow.T_T0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.IsentropicFlow.T_T0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temperature ratio from Mach number.</p>
+<dl class="docutils">
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Mach number.</dd>
+</dl>
+<dl class="docutils">
+<dt>T_T0 <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Temperature ratio.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skaero.gasdynamics.isentropic.IsentropicFlow.p_p0">
+<tt class="descname">p_p0</tt><big>(</big><em>x</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#IsentropicFlow.p_p0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.IsentropicFlow.p_p0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pressure ratio from Mach number.</p>
+<dl class="docutils">
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Mach number.</dd>
+</dl>
+<dl class="docutils">
+<dt>p_p0 <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Pressure ratio.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="skaero.gasdynamics.isentropic.IsentropicFlow.rho_rho0">
+<tt class="descname">rho_rho0</tt><big>(</big><em>x</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#IsentropicFlow.rho_rho0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.IsentropicFlow.rho_rho0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Density ratio from Mach number.</p>
+<dl class="docutils">
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Mach number.</dd>
+</dl>
+<dl class="docutils">
+<dt>rho_rho0 <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Density ratio.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="skaero.gasdynamics.isentropic.PrandtlMeyerExpansion">
+<em class="property">class </em><tt class="descclassname">skaero.gasdynamics.isentropic.</tt><tt class="descname">PrandtlMeyerExpansion</tt><big>(</big><em>M_1</em>, <em>nu</em>, <em>gamma=1.4</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#PrandtlMeyerExpansion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.PrandtlMeyerExpansion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing a Prandtl-Meyer expansion fan.</p>
+<dl class="docutils">
+<dt>M_1 <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Upstream Mach number.</dd>
+<dt>nu <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Deflection angle, in radians.</dd>
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd>Specific heat ratio, default 7 / 5.</dd>
+</dl>
+<dl class="docutils">
+<dt>ValueError</dt>
+<dd>If given Mach number is subsonic.</dd>
+</dl>
+<ul class="simple">
+<li>What does the relationship with the IsentropicFlow class look like?</li>
+<li>Tests.</li>
+</ul>
+<dl class="attribute">
+<dt id="skaero.gasdynamics.isentropic.PrandtlMeyerExpansion.M_2">
+<tt class="descname">M_2</tt><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#PrandtlMeyerExpansion.M_2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.PrandtlMeyerExpansion.M_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downstream Mach number.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="skaero.gasdynamics.isentropic.PrandtlMeyerExpansion.nu">
+<em class="property">static </em><tt class="descname">nu</tt><big>(</big><em>M</em>, <em>gamma=1.4</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#PrandtlMeyerExpansion.nu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.PrandtlMeyerExpansion.nu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn angle given Mach number.</p>
+<p>The result is given by evaluating the Prandtl-Meyer function.</p>
+<dl class="docutils">
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Mach number.</dd>
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float, optional.</span></dt>
+<dd>Specific heat ratio, default 7 / 5.</dd>
+</dl>
+<dl class="docutils">
+<dt>nu <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Turn angle, in radians.</dd>
+</dl>
+<dl class="docutils">
+<dt>ValueError</dt>
+<dd>If Mach number is subsonic.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="skaero.gasdynamics.isentropic.mach_angle">
+<tt class="descclassname">skaero.gasdynamics.isentropic.</tt><tt class="descname">mach_angle</tt><big>(</big><em>M</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#mach_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.mach_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns Mach angle given supersonic Mach number.</p>
+<dl class="docutils">
+<dt>M <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Mach number.</dd>
+</dl>
+<dl class="docutils">
+<dt>mu <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Mach angle.</dd>
+</dl>
+<dl class="docutils">
+<dt>ValueError</dt>
+<dd>If given Mach number is subsonic.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="skaero.gasdynamics.isentropic.mach_from_area_ratio">
+<tt class="descclassname">skaero.gasdynamics.isentropic.</tt><tt class="descname">mach_from_area_ratio</tt><big>(</big><em>fl</em>, <em>A_Astar</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/isentropic.html#mach_from_area_ratio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.isentropic.mach_from_area_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Mach number given an area ratio asuming isentropic flow.</p>
+<p>Uses the relation between Mach number and area ratio for isentropic flow,
+and returns both the subsonic and the supersonic solution.</p>
+<dl class="docutils">
+<dt>fl <span class="classifier-delimiter">:</span> <span class="classifier">IsentropicFlow</span></dt>
+<dd>Isentropic flow object.</dd>
+<dt>A_Astar <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Cross sectional area.</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">tuple of floats</span></dt>
+<dd>Subsonic and supersonic Mach number solution of the equation.</dd>
+</dl>
+<dl class="docutils">
+<dt>ValueError</dt>
+<dd>If the area ratio is less than 1.0 (the critical area is always the
+minimum).</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-skaero.gasdynamics.shocks">
+<span id="shocks"></span><h2>Shocks<a class="headerlink" href="#module-skaero.gasdynamics.shocks" title="Permalink to this headline">¶</a></h2>
+<p>Shock waves.</p>
+<div class="section" id="id1">
+<h3>Routines<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>max_deflection(M_1, gamma=1.4)
+Shock(<a href="#id2"><span class="problematic" id="id3">**</span></a>kwargs)</p>
+<p>The important piece of the module is <cite>Shock</cite>, which returns a shock object
+from a variety of combinations of parameters. For more information and
+examples, see the docstring of <cite>Shock</cite>.</p>
+</div>
+<div class="section" id="id4">
+<h3>Examples<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skaero.gasdynamics</span> <span class="kn">import</span> <span class="n">shocks</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ns</span> <span class="o">=</span> <span class="n">shocks</span><span class="o">.</span><span class="n">Shock</span><span class="p">(</span><span class="n">M_1</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.4</span><span class="p">)</span>  <span class="c"># Normal shock by default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shocks</span><span class="o">.</span><span class="n">Shock</span><span class="p">(</span><span class="n">M_1</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">25</span><span class="p">),</span> <span class="n">weak</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="skaero.gasdynamics.shocks.Shock">
+<tt class="descclassname">skaero.gasdynamics.shocks.</tt><tt class="descname">Shock</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#skaero.gasdynamics.shocks.Shock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an object representing a shock wave.</p>
+<dl class="docutils">
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd>Specific heat ratio, default 7 / 5.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ss1</span> <span class="o">=</span> <span class="n">Shock</span><span class="p">(</span><span class="n">M_1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>  <span class="c"># Given upstream Mach number (default beta = 90°)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss1</span><span class="o">.</span><span class="n">M_2</span>
+<span class="go">0.70108874169309943</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss1</span><span class="o">.</span><span class="n">beta</span>
+<span class="go">1.5707963267948966</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss1</span><span class="o">.</span><span class="n">theta</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss2</span> <span class="o">=</span> <span class="n">Shock</span><span class="p">(</span><span class="n">M_1</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mf">20.0</span><span class="p">),</span> <span class="n">weak</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss2</span><span class="o">.</span><span class="n">beta</span>  <span class="c"># Notice it is an oblique shock</span>
+<span class="go">0.6590997534071927</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>This is a list of possible cases<ul>
+<li>M_1(, beta=np.pi / 2) -&gt; _ShockClass(M_1, beta) (only direct case)</li>
+<li>M_2(, beta=np.pi / 2)</li>
+<li>p2_p1(, beta=np.pi / 2)</li>
+<li>...</li>
+<li>M_1, theta(, weak=True)</li>
+<li>M_2, theta(, weak=True)</li>
+<li>p2_p1, theta(, weak=True)</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="skaero.gasdynamics.shocks.max_deflection">
+<tt class="descclassname">skaero.gasdynamics.shocks.</tt><tt class="descname">max_deflection</tt><big>(</big><em>M_1</em>, <em>gamma=1.4</em><big>)</big><a class="reference internal" href="_modules/skaero/gasdynamics/shocks.html#max_deflection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.gasdynamics.shocks.max_deflection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns maximum deflection angle and corresponding wave angle for given
+Mach number.</p>
+<dl class="docutils">
+<dt>M_1 <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Upstream Mach number.</dd>
+<dt>gamma <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd>Specific heat ratio, default 7 / 5.</dd>
+</dl>
+<dl class="docutils">
+<dt>theta <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Maximum deflection angle.</dd>
+<dt>beta <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Corresponding wave angle.</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-skaero.atmosphere.coesa">
+<span id="atmosphere"></span><h2>Atmosphere<a class="headerlink" href="#module-skaero.atmosphere.coesa" title="Permalink to this headline">¶</a></h2>
+<p>COESA model.</p>
+<div class="section" id="id5">
+<h3>Routines<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>geometric_to_geopotential(z)
+coesa(h)</p>
+</div>
+<div class="section" id="id6">
+<h3>Examples<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skaero.atmosphere</span> <span class="kn">import</span> <span class="n">coesa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">rho</span> <span class="o">=</span> <span class="n">coesa</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="todo">
+<h3>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Check geopotential temperature</li>
+<li>Move to OOP</li>
+</ul>
+<dl class="function">
+<dt id="skaero.atmosphere.coesa.geometric_to_geopotential">
+<tt class="descclassname">skaero.atmosphere.coesa.</tt><tt class="descname">geometric_to_geopotential</tt><big>(</big><em>z</em><big>)</big><a class="reference internal" href="_modules/skaero/atmosphere/coesa.html#geometric_to_geopotential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.atmosphere.coesa.geometric_to_geopotential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns geopotential altitude from geometric altitude.</p>
+<dl class="docutils">
+<dt>z <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Geometric altitude in meters.</dd>
+</dl>
+<dl class="docutils">
+<dt>h <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Geopotential altitude in meters.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="skaero.atmosphere.coesa.table">
+<tt class="descclassname">skaero.atmosphere.coesa.</tt><tt class="descname">table</tt><big>(</big><em>h</em><big>)</big><a class="reference internal" href="_modules/skaero/atmosphere/coesa.html#table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skaero.atmosphere.coesa.table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes table of COESA atmosphere properties.</p>
+<p>Returns temperature, pressure and density COESA values at the given
+geopotential altitude.</p>
+<dl class="docutils">
+<dt>h <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Geopotential altitude given in meters.</dd>
+</dl>
+<dl class="docutils">
+<dt>h <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Given geopotential altitude in meters.</dd>
+<dt>T <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Temperature in Kelvin.</dd>
+<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Pressure in Pascal.</dd>
+<dt>rho <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>Density in kilograms per cubic meter.</dd>
+</dl>
+<p>Based on the <a class="reference external" href="http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539_1977009539.pdf">U.S. 1976 Standard Atmosphere</a>.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="scikit-aero"
+             >previous</a> |</li>
+        <li><a href="index.html">scikit-aero 0.2-dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Juan Luis Cano.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.Theme by <a href="http://github.com/vkvn">vkvn</a>
+    </div>
+  </body>
+</html>
