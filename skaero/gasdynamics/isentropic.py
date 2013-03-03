@@ -196,10 +196,6 @@ class IsentropicFlow(object):
 class PrandtlMeyerExpansion(object):
     """Class representing a Prandtl-Meyer expansion fan.
 
-    TODO
-    ----
-    * Tests.
-
     """
     @staticmethod
     def nu(M, gamma=1.4):
@@ -290,7 +286,7 @@ class PrandtlMeyerExpansion(object):
         """Angle of rearward Mach line.
 
         """
-        return mach_angle(self.M_1)
+        return mach_angle(self.M_2)
 
     @property
     def p2_p1(self):
