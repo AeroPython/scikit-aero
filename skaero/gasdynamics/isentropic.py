@@ -27,7 +27,7 @@ import numpy as np
 import scipy as sp
 import scipy.optimize
 
-from skaero import decorators
+from skaero.utils.decorators import method_decorator
 
 
 def mach_angle(M):
@@ -108,7 +108,7 @@ class IsentropicFlow(object):
     def __init__(self, gamma=1.4):
         self.gamma = gamma
 
-    @decorators.arrayize
+    @method_decorator(np.vectorize)
     def p_p0(self, M):
         """Pressure ratio from Mach number.
 
@@ -125,8 +125,8 @@ class IsentropicFlow(object):
         """
         p_p0 = self.T_T0(M) ** (self.gamma / (self.gamma - 1))
         return p_p0
-
-    @decorators.arrayize
+    
+    @method_decorator(np.vectorize)
     def rho_rho0(self, M):
         """Density ratio from Mach number.
 
@@ -143,8 +143,8 @@ class IsentropicFlow(object):
         """
         rho_rho0 = self.T_T0(M) ** (1 / (self.gamma - 1))
         return rho_rho0
-
-    @decorators.arrayize
+    
+    @method_decorator(np.vectorize)
     def T_T0(self, M):
         """Temperature ratio from Mach number.
 
@@ -161,8 +161,8 @@ class IsentropicFlow(object):
         """
         T_T0 = 1 / (1 + (self.gamma - 1) * M * M / 2)
         return T_T0
-
-    @decorators.arrayize
+    
+    @method_decorator(np.vectorize)
     def A_Astar(self, M):
         """Area ratio from Mach number.
 
