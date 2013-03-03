@@ -6,12 +6,13 @@ Isentropic relations.
 Routines
 --------
 mach_angle(M)
-prandtl_meyer_function(M, gamma=1.4)
+prandtl_meyer_function(M, fl=None)
 mach_from_area_ratio(fl, A_Astar)
 
 Classes
 -------
 IsentropicFlow(gamma)
+PrandtlMeyerExpansion(M_1, nu, fl=None)
 
 Examples
 --------
@@ -99,13 +100,16 @@ def mach_from_area_ratio(A_Astar, fl=None):
 class IsentropicFlow(object):
     """Class representing an isentropic flow.
 
-    Parameters
-    ----------
-    gamma : float, optional
-        Specific heat ratio, default 7 / 5.
-
     """
     def __init__(self, gamma=1.4):
+        """Constructor of IsentropicFlow.
+
+        Parameters
+        ----------
+        gamma : float, optional
+            Specific heat ratio, default 7 / 5.
+
+        """
         self.gamma = gamma
 
     @method_decorator(np.vectorize)
@@ -125,7 +129,7 @@ class IsentropicFlow(object):
         """
         p_p0 = self.T_T0(M) ** (self.gamma / (self.gamma - 1))
         return p_p0
-    
+
     @method_decorator(np.vectorize)
     def rho_rho0(self, M):
         """Density ratio from Mach number.
@@ -143,7 +147,7 @@ class IsentropicFlow(object):
         """
         rho_rho0 = self.T_T0(M) ** (1 / (self.gamma - 1))
         return rho_rho0
-    
+
     @method_decorator(np.vectorize)
     def T_T0(self, M):
         """Temperature ratio from Mach number.
@@ -161,7 +165,7 @@ class IsentropicFlow(object):
         """
         T_T0 = 1 / (1 + (self.gamma - 1) * M * M / 2)
         return T_T0
-    
+
     @method_decorator(np.vectorize)
     def A_Astar(self, M):
         """Area ratio from Mach number.
@@ -192,23 +196,8 @@ class IsentropicFlow(object):
 class PrandtlMeyerExpansion(object):
     """Class representing a Prandtl-Meyer expansion fan.
 
-    Parameters
-    ----------
-    M_1 : float
-        Upstream Mach number.
-    nu : float
-        Deflection angle, in radians.
-    gamma : float, optional
-        Specific heat ratio, default 7 / 5.
-
-    Raises
-    ------
-    ValueError
-        If given Mach number is subsonic.
-
     TODO
     ----
-    * What does the relationship with the IsentropicFlow class look like?
     * Tests.
 
     """
@@ -222,7 +211,7 @@ class PrandtlMeyerExpansion(object):
         ----------
         M : float
             Mach number.
-        gamma : float, optional.
+        gamma : float, optional
             Specific heat ratio, default 7 / 5.
 
         Returns
@@ -246,21 +235,75 @@ class PrandtlMeyerExpansion(object):
             raise ValueError("Mach number must be supersonic")
         return nu
 
-    def __init__(self, M_1, nu, gamma=1.4):
+    def __init__(self, M_1, nu, fl=None):
+        """Constructor of PrandtlMeyerExpansion.
+
+        Parameters
+        ----------
+        M_1 : float
+            Upstream Mach number.
+        nu : float
+            Deflection angle, in radians.
+        fl : IsentropicFlow, optional.
+            Flow to be expanded, default flow with gamma = 7 / 5.
+
+        Raises
+        ------
+        ValueError
+            If given Mach number is subsonic.
+
+        """
+        if not fl:
+            fl = IsentropicFlow(gamma=1.4)
         nu_max = (
-            PrandtlMeyerExpansion.nu(np.inf, gamma) -
-            PrandtlMeyerExpansion.nu(M_1, gamma))
+            PrandtlMeyerExpansion.nu(np.inf, fl.gamma) -
+            PrandtlMeyerExpansion.nu(M_1, fl.gamma))
         if nu > nu_max:
             raise ValueError(
                 "Deflection angle must be lower than maximum {:.2f}°"
                 .format(np.degrees(nu_max)))
         self.M_1 = M_1
         self.nu = nu
-        self.gamma = gamma
+        self.fl = fl
 
     @property
     def M_2(self):
         """Downstream Mach number.
 
         """
-        raise NotImplementedError
+        def eq(M, nu, gamma):
+            return PrandtlMeyerExpansion.nu(M, gamma) - nu
+
+        nu_2 = self.nu + PrandtlMeyerExpansion.nu(self.M_1, self.fl.gamma)
+        M_2 = sp.optimize.newton(eq, self.M_1, args=(nu_2, self.fl.gamma))
+        return M_2
+
+    @property
+    def mu_1(self):
+        """Angle of forward Mach line.
+
+        """
+        return mach_angle(self.M_1)
+
+    @property
+    def mu_2(self):
+        """Angle of rearward Mach line.
+
+        """
+        return mach_angle(self.M_1)
+
+    @property
+    def p2_p1(self):
+        """Pressure ratio across the expansion fan.
+
+        """
+        p2_p1 = self.fl.p_p0(self.M_2) / self.fl.p_p0(self.M_1)
+        return p2_p1
+
+    @property
+    def T2_T1(self):
+        """Temperature ratio across the expansion fan.
+
+        """
+        T2_T1 = self.fl.T_T0(self.M_2) / self.fl.T_T0(self.M_1)
+        return T2_T1
