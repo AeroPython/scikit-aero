@@ -17,7 +17,11 @@ setup(
         "engineering", "atmosphere", "gas"
     ],
     requires=["numpy", "scipy"],
-    packages=["skaero", "skaero.atmosphere", "skaero.gasdynamics"],
+    packages=[
+        "skaero",
+        "skaero.atmosphere", "skaero.gasdynamics",
+        "skaero.util"
+    ],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Education",
