@@ -24,29 +24,10 @@ from __future__ import division, absolute_import
 
 import numpy as np
 
-R_Earth = 6369.0e3  # m
-
 g_0p = 9.80665  # m / s^2
 M_0 = 28.9644e-3  # kg / mol
 Rs = 8.31432  # N m / (mol K)
-
-
-def geometric_to_geopotential(z):
-    """Returns geopotential altitude from geometric altitude.
-
-    Parameters
-    ----------
-    z : array_like
-        Geometric altitude in meters.
-
-    Returns
-    -------
-    h : array_like
-        Geopotential altitude in meters.
-
-    """
-    h = z * R_Earth / (z + R_Earth)
-    return h
+R = Rs / M_0
 
 
 def table(h):

@@ -27,6 +27,7 @@ import numpy.testing
 import scipy.constants
 
 from skaero.atmosphere import coesa
+from skaero.atmosphere.util import geometric_to_geopotential
 
 
 # Load data from PDAS atmos
@@ -83,7 +84,7 @@ def test_under_1000m():
 
     """
     z_ = np.array([50.0, 550.0, 850.0])
-    h_ = coesa.geometric_to_geopotential(z_)
+    h_ = geometric_to_geopotential(z_)
 
     # Retrieve desired data from PDAS tables
     desired = np.array([data[data[:, 0] == x][0] for x in z_])
@@ -104,7 +105,7 @@ def test_under_11km():
 
     """
     z_ = np.array([500.0, 2500.0, 6500.0, 9000.0, 11000.0])
-    h_ = coesa.geometric_to_geopotential(z_)
+    h_ = geometric_to_geopotential(z_)
 
     # Retrieve desired data from PDAS tables
     desired = np.array([data[data[:, 0] == x][0] for x in z_])
