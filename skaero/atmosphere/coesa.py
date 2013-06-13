@@ -24,6 +24,7 @@ from __future__ import division, absolute_import
 
 import numpy as np
 
+gamma = 1.4
 g_0p = 9.80665  # m / s^2
 M_0 = 28.9644e-3  # kg / mol
 Rs = 8.31432  # N m / (mol K)
@@ -54,9 +55,11 @@ def table(h):
 
     Notes
     -----
-    Based on the `U.S. 1976 Standard Atmosphere`_.
+    Based on the U.S. 1976 Standard Atmosphere.
 
     .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19770009539_1977009539.pdf
+
+    TODO: Revisit vectorization
 
     """
 
@@ -73,8 +76,4 @@ def table(h):
     # TODO: Maybe use pressure ratio to be consistent w/ the COESA standard.
     p = p_0 * (T_0 / (T_0 + L_0 * (h - h_0))) ** (g_0p * M_0 / (Rs * L_0))
     rho = p * M_0 / (Rs * T)
-    return (
-        h,
-        T,
-        p,
-        rho)
+    return h, T, p, rho
