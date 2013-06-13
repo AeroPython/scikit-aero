@@ -19,7 +19,7 @@ setup(
     requires=["numpy", "scipy"],
     packages=[
         "skaero",
-        "skaero.atmosphere", "skaero.gasdynamics",
+        "skaero.atmosphere", "skaero.flight", "skaero.gasdynamics",
         "skaero.util"
     ],
     classifiers=[
