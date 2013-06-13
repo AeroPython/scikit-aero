@@ -28,7 +28,7 @@ import numpy as np
 import scipy as sp
 import scipy.optimize
 
-from skaero.utils.decorators import implicit, method_decorator
+from skaero.util.decorators import implicit
 
 
 def mach_angle(M):
@@ -112,7 +112,6 @@ class IsentropicFlow(object):
         """
         self.gamma = gamma
 
-    @method_decorator(np.vectorize)
     def p_p0(self, M):
         """Pressure ratio from Mach number.
 
@@ -127,10 +126,10 @@ class IsentropicFlow(object):
             Pressure ratio.
 
         """
+        M = np.asanyarray(M)
         p_p0 = self.T_T0(M) ** (self.gamma / (self.gamma - 1))
         return p_p0
 
-    @method_decorator(np.vectorize)
     def rho_rho0(self, M):
         """Density ratio from Mach number.
 
@@ -145,10 +144,10 @@ class IsentropicFlow(object):
             Density ratio.
 
         """
+        M = np.asanyarray(M)
         rho_rho0 = self.T_T0(M) ** (1 / (self.gamma - 1))
         return rho_rho0
 
-    @method_decorator(np.vectorize)
     def T_T0(self, M):
         """Temperature ratio from Mach number.
 
@@ -163,10 +162,10 @@ class IsentropicFlow(object):
             Temperature ratio.
 
         """
+        M = np.asanyarray(M)
         T_T0 = 1 / (1 + (self.gamma - 1) * M * M / 2)
         return T_T0
 
-    @method_decorator(np.vectorize)
     def A_Astar(self, M):
         """Area ratio from Mach number.
 
@@ -183,6 +182,7 @@ class IsentropicFlow(object):
             Area ratio.
 
         """
+        M = np.asanyarray(M)
         # If there is any zero entry, NumPy array division gives infinity,
         # which is correct.
         with np.errstate(divide='ignore'):
