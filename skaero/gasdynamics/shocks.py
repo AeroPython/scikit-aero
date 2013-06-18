@@ -88,6 +88,7 @@ def _ShockFactory(**kwargs):
 
     TODO
     ----
+    REMOVE MAGIC
     * This is a list of possible cases
 
       * M_1(, beta=np.pi / 2) -> _ShockClass(M_1, beta) (only direct case)
