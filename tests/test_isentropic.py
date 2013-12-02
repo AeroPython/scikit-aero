@@ -29,19 +29,19 @@ def test_mach_angle():
         19.47,
         0.0
     ]
-    results_list = [isentropic.mach_angle(M) for M in M_list]
-    for i in range(len(M_list)):
-        np.testing.assert_almost_equal(
-            results_list[i], np.radians(mu_list[i]), decimal=3)
+    expected_mach_angles = [np.radians(val) for val in mu_list]
+    mach_angles = [isentropic.mach_angle(M) for M in M_list]
+    np.testing.assert_array_almost_equal(mach_angles,
+                                         expected_mach_angles,
+                                         decimal=3)
 
 
-def test_mach_angle_raises_error_subsonic():
+def test_mach_angle_raises_error__when_mach_is_lower_than_one():
     with pytest.raises(ValueError):
         isentropic.mach_angle(0.8)
 
 
 def test_pm_angle():
-    gamma = 1.4
     M_list = [1.2, 1.4, 2.6, 3.2, np.inf]
     nu_list = [
         3.558,
@@ -50,21 +50,24 @@ def test_pm_angle():
         53.47,
         130.45
     ]
-    results_list = [
-        isentropic.PrandtlMeyerExpansion.nu(M, gamma) for M in M_list]
-    for i in range(len(M_list)):
-        np.testing.assert_almost_equal(
-            results_list[i], np.radians(nu_list[i]), decimal=3)
+    expected_angles = [np.radians(val) for val in nu_list]
+    turn_angles = [
+        isentropic.PrandtlMeyerExpansion.nu(M) for M in M_list]
+    np.testing.assert_array_almost_equal(turn_angles,
+                                         expected_angles,
+                                         decimal=3)
 
 
-def test_default_flow():
-    pm = isentropic.PrandtlMeyerExpansion(1.2, 0.8)
+def test_default_gamma_for_new_IsentropicFlow():
+    unused_value_equals_or_bigger_than_one = 1.0
+    pm = isentropic.PrandtlMeyerExpansion(unused_value_equals_or_bigger_than_one,
+                                          unused_value_equals_or_bigger_than_one)
     assert pm.fl.gamma == 1.4
 
 
 def test_pm_expansion():
-    # Example 4.13 from Anderson
-    fl = isentropic.IsentropicFlow(gamma=1.4)
+    # Example 4.13 from Anderson. Default gamma=1.4 used
+    fl = isentropic.IsentropicFlow()
     pm = isentropic.PrandtlMeyerExpansion(M_1=1.5, nu=np.radians(20), fl=fl)
     np.testing.assert_almost_equal(pm.M_2, 2.207, decimal=3)
     np.testing.assert_almost_equal(pm.p2_p1, 0.340, decimal=3)
@@ -73,26 +76,39 @@ def test_pm_expansion():
     np.testing.assert_almost_equal(pm.mu_2, np.radians(26.95), decimal=3)
 
 
-def test_pm_raises_error_max_deflection():
-    fl = isentropic.IsentropicFlow(gamma=1.4)
+def test_PrandtlMeyerExpansion_raises_error_when_deflection_angle_is_not_lower_than_maximum():
+    unused = 0.0
+    wrong_angle = np.radians(125)
     with pytest.raises(ValueError):
-        isentropic.PrandtlMeyerExpansion(3.0, np.radians(125), fl)
+        isentropic.PrandtlMeyerExpansion(unused, wrong_angle)
 
 
-def test_pm_function_raises_error_subsonic():
+def test_PrandtlMeyerExpansion_raises_error_when_match_is_under_one():
+    wrong_match = 0.9
     with pytest.raises(ValueError):
-        isentropic.PrandtlMeyerExpansion.nu(0.8)
+        isentropic.PrandtlMeyerExpansion.nu(wrong_match)
 
-
+''' Esta prueba no prueba nada (no assert)
 def test_isentropic_flow_constructor():
     gamma = 1.4
     isentropic.IsentropicFlow(gamma)
+'''
+
+'''
+Esta prueba tampoco prueba nada (aunque lo parezca)
+Prueba a cambiar elcostructor y a no signarle el parametro, ya veras
+como fallan varias pruebas de esta suite
+'''
+def test_isentropic_flow_has_the_gamma_indicated_in_constructor():
+    gamma = 1.4
+    flow = isentropic.IsentropicFlow(gamma)
+    np.testing.assert_almost_equal(flow.gamma, gamma, decimal=3)
 
 
 def test_pressure_ratio():
     fl = isentropic.IsentropicFlow(1.4)
     M_list = [0.0, 0.27, 0.89, 1.0, 1.30, 2.05]
-    p_ratio_list = [
+    expected_pressure_ratios = [
         1.0,
         0.9506,
         0.5977,
@@ -101,14 +117,14 @@ def test_pressure_ratio():
         0.1182
     ]
     np.testing.assert_array_almost_equal(
-        fl.p_p0(M_list), p_ratio_list, decimal=4
+        fl.p_p0(M_list), expected_pressure_ratios, decimal=4
     )
 
 
 def test_area_ratio():
     fl = isentropic.IsentropicFlow(1.4)
     M_list = [0.0, 0.38, 0.79, 1.0, 1.24, 2.14]
-    A_Astar_list = [
+    expected_area_ratios = [
         np.infty,
         1.6587,
         1.0425,
@@ -117,7 +133,7 @@ def test_area_ratio():
         1.902
     ]
     np.testing.assert_array_almost_equal(
-        fl.A_Astar(M_list), A_Astar_list, decimal=3
+        fl.A_Astar(M_list), expected_area_ratios, decimal=3
     )
 
 
@@ -126,9 +142,9 @@ def test_area_ratio_no_zero_division_error():
     assert np.isposinf(fl.A_Astar(0))
 
 
-def test_mach_from_area_ratio_raises_error_ratio_greater_1():
+def test_mach_from_area_ratio_raises_error_when_ratio_is_lower_than_1():
     with pytest.raises(ValueError):
-        isentropic.mach_from_area_ratio(0.8)
+        isentropic.mach_from_area_ratio(0.9)
 
 
 def test_mach_from_area_ratio_subsonic():
@@ -140,20 +156,19 @@ def test_mach_from_area_ratio_subsonic():
         1.0382,
         1.0,
     ]
-    M_sub_list = [
+    expected_ratios = [
         0.0,
         0.25,
         0.35,
         0.8,
         1.0
     ]
-    results_list = [
+    mach_from_area_ratios = [
         isentropic.mach_from_area_ratio(A_Astar, fl)[0]  # Subsonic
         for A_Astar in A_Astar_list]
-    for i in range(len(A_Astar_list)):
-        np.testing.assert_almost_equal(
-            results_list[i], M_sub_list[i], decimal=3)
-
+    np.testing.assert_array_almost_equal(
+        mach_from_area_ratios, expected_ratios, decimal=3
+    )
 
 def test_mach_from_area_ratio_supersonic():
     fl = isentropic.IsentropicFlow(1.4)
@@ -164,16 +179,33 @@ def test_mach_from_area_ratio_supersonic():
         1.902,
         4.441
     ]
-    M_sup_list = [
+    expected_ratios = [
         1.0,
         1.24,
         1.69,
         2.14,
         3.05
     ]
-    results_list = [
+    mach_from_area_ratios = [
         isentropic.mach_from_area_ratio(A_Astar, fl)[1]  # Supersonic
         for A_Astar in A_Astar_list]
-    for i in range(len(A_Astar_list)):
-        np.testing.assert_almost_equal(
-            results_list[i], M_sup_list[i], decimal=2)
+
+    np.testing.assert_array_almost_equal(
+        mach_from_area_ratios, expected_ratios, decimal=2
+    )
+
+
+def test_density_ratio():
+    fl = isentropic.IsentropicFlow(1.4)
+    M_list = [0.0, 0.27, 0.89, 1.0, 1.30, 2.05]
+    expected_density_ratios = [ 1.0,
+                                 0.96446008,
+                                 0.69236464,
+                                 0.63393815,
+                                 0.48290279,
+                                 0.21760078]
+    density_ratios =fl.rho_rho0(M_list)
+    np.testing.assert_array_almost_equal(
+       density_ratios, expected_density_ratios, decimal=4
+    )
+
