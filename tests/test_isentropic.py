@@ -36,9 +36,10 @@ def test_mach_angle():
                                          decimal=3)
 
 
-def test_mach_angle_raises_error__when_mach_is_lower_than_one():
-    with pytest.raises(ValueError):
+def test_mach_angle_raises_error__when_mach_is_subsonic():
+    with pytest.raises(ValueError) as excinfo:
         isentropic.mach_angle(0.8)
+    assert excinfo.exconly().startswith("ValueError: Mach number must be supersonic")
 
 
 def test_pm_angle():
@@ -76,29 +77,22 @@ def test_pm_expansion():
     np.testing.assert_almost_equal(pm.mu_2, np.radians(26.95), decimal=3)
 
 
-def test_PrandtlMeyerExpansion_raises_error_when_deflection_angle_is_not_lower_than_maximum():
-    unused = 0.0
+def test_PrandtlMeyerExpansion_raises_error_when_deflection_angle_is_over_the_maximum_and_match_is_supersonic():
+    match = 3.0
     wrong_angle = np.radians(125)
-    with pytest.raises(ValueError):
-        isentropic.PrandtlMeyerExpansion(unused, wrong_angle)
+    with pytest.raises(ValueError) as excinfo:
+        isentropic.PrandtlMeyerExpansion(match, wrong_angle)
+    # print excinfo.exconly()
+    assert excinfo.exconly().startswith("ValueError: Deflection angle must be lower than maximum")
 
 
-def test_PrandtlMeyerExpansion_raises_error_when_match_is_under_one():
+def test_PrandtlMeyerExpansion_raises_error_when_match_is_subsonic():
     wrong_match = 0.9
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as excinfo:
         isentropic.PrandtlMeyerExpansion.nu(wrong_match)
+    assert excinfo.exconly().startswith("ValueError: Mach number must be supersonic")
 
-''' Esta prueba no prueba nada (no assert)
-def test_isentropic_flow_constructor():
-    gamma = 1.4
-    isentropic.IsentropicFlow(gamma)
-'''
 
-'''
-Esta prueba tampoco prueba nada (aunque lo parezca)
-Prueba a cambiar elcostructor y a no signarle el parametro, ya veras
-como fallan varias pruebas de esta suite
-'''
 def test_isentropic_flow_has_the_gamma_indicated_in_constructor():
     gamma = 1.4
     flow = isentropic.IsentropicFlow(gamma)
@@ -142,7 +136,7 @@ def test_area_ratio_no_zero_division_error():
     assert np.isposinf(fl.A_Astar(0))
 
 
-def test_mach_from_area_ratio_raises_error_when_ratio_is_lower_than_1():
+def test_mach_from_area_ratio_raises_error_when_ratio_is_subsonic():
     with pytest.raises(ValueError):
         isentropic.mach_from_area_ratio(0.9)
 
