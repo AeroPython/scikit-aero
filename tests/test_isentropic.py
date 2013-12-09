@@ -36,13 +36,14 @@ def test_mach_angle():
                                          decimal=3)
 
 
-def test_mach_angle_raises_error__when_mach_is_subsonic():
+def test_mach_angle_raises_error_when_mach_is_subsonic():
     with pytest.raises(ValueError) as excinfo:
         isentropic.mach_angle(0.8)
-    assert excinfo.exconly().startswith("ValueError: Mach number must be supersonic")
+    assert excinfo.exconly().startswith("ValueError: "
+                                        "Mach number must be supersonic")
 
 
-def test_pm_angle():
+def test_PrandtlMeyerExpansion_angle():
     M_list = [1.2, 1.4, 2.6, 3.2, np.inf]
     nu_list = [
         3.558,
@@ -60,13 +61,12 @@ def test_pm_angle():
 
 
 def test_default_gamma_for_new_IsentropicFlow():
-    unused_value_equals_or_bigger_than_one = 1.0
-    pm = isentropic.PrandtlMeyerExpansion(unused_value_equals_or_bigger_than_one,
-                                          unused_value_equals_or_bigger_than_one)
+    _ = 1.0  # Unused value, equals or bigger than one
+    pm = isentropic.PrandtlMeyerExpansion(_, _)
     assert pm.fl.gamma == 1.4
 
 
-def test_pm_expansion():
+def test_PrandtlMeyerExpansion_example():
     # Example 4.13 from Anderson. Default gamma=1.4 used
     fl = isentropic.IsentropicFlow()
     pm = isentropic.PrandtlMeyerExpansion(M_1=1.5, nu=np.radians(20), fl=fl)
@@ -77,20 +77,21 @@ def test_pm_expansion():
     np.testing.assert_almost_equal(pm.mu_2, np.radians(26.95), decimal=3)
 
 
-def test_PrandtlMeyerExpansion_raises_error_when_deflection_angle_is_over_the_maximum_and_match_is_supersonic():
-    match = 3.0
+def test_PrandtlMeyerExpansion_raises_error_when_deflection_angle_is_over_the_maximum_and_mach_is_supersonic():
+    mach = 3.0
     wrong_angle = np.radians(125)
     with pytest.raises(ValueError) as excinfo:
-        isentropic.PrandtlMeyerExpansion(match, wrong_angle)
-    # print excinfo.exconly()
-    assert excinfo.exconly().startswith("ValueError: Deflection angle must be lower than maximum")
+        isentropic.PrandtlMeyerExpansion(mach, wrong_angle)
+    assert excinfo.exconly().startswith("ValueError: Deflection angle must "
+                                        "be lower than maximum")
 
 
-def test_PrandtlMeyerExpansion_raises_error_when_match_is_subsonic():
-    wrong_match = 0.9
+def test_PrandtlMeyerExpansion_raises_error_when_Mach_is_subsonic():
+    wrong_mach = 0.9
     with pytest.raises(ValueError) as excinfo:
-        isentropic.PrandtlMeyerExpansion.nu(wrong_match)
-    assert excinfo.exconly().startswith("ValueError: Mach number must be supersonic")
+        isentropic.PrandtlMeyerExpansion.nu(wrong_mach)
+    assert excinfo.exconly().startswith("ValueError: Mach number must"
+                                        "be supersonic")
 
 
 def test_isentropic_flow_has_the_gamma_indicated_in_constructor():
@@ -164,6 +165,7 @@ def test_mach_from_area_ratio_subsonic():
         mach_from_area_ratios, expected_ratios, decimal=3
     )
 
+
 def test_mach_from_area_ratio_supersonic():
     fl = isentropic.IsentropicFlow(1.4)
     A_Astar_list = [
@@ -192,14 +194,13 @@ def test_mach_from_area_ratio_supersonic():
 def test_density_ratio():
     fl = isentropic.IsentropicFlow(1.4)
     M_list = [0.0, 0.27, 0.89, 1.0, 1.30, 2.05]
-    expected_density_ratios = [ 1.0,
-                                 0.96446008,
-                                 0.69236464,
-                                 0.63393815,
-                                 0.48290279,
-                                 0.21760078]
-    density_ratios =fl.rho_rho0(M_list)
+    expected_density_ratios = [1.0,
+                               0.96446008,
+                               0.69236464,
+                               0.63393815,
+                               0.48290279,
+                               0.21760078]
+    density_ratios = fl.rho_rho0(M_list)
     np.testing.assert_array_almost_equal(
-       density_ratios, expected_density_ratios, decimal=4
+        density_ratios, expected_density_ratios, decimal=4
     )
-
