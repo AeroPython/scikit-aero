@@ -7,6 +7,7 @@ Utilities for atmospheric calculations.
 
 from __future__ import division, absolute_import
 
+import numpy as np
 
 def geometric_to_geopotential(z, R_Earth = 6369.0e3):
     """Returns geopotential altitude from geometric altitude.
@@ -25,7 +26,8 @@ def geometric_to_geopotential(z, R_Earth = 6369.0e3):
         Geopotential altitude in meters.
 
     """
-    h = z * R_Earth / (z + R_Earth)
+    
+    h = np.array(z) * R_Earth / (np.array(z) + R_Earth)
     return h
     
 def geopotential_to_geometric(h, R_Earth = 6369.0e3):
@@ -51,5 +53,6 @@ def geopotential_to_geometric(h, R_Earth = 6369.0e3):
     .. _`U.S. 1976 Standard Atmosphere`
         
     """
-    z = h * R_Earth / (R_Earth - h)
+    
+    z = np.array(h) * R_Earth / (R_Earth - np.array(h))
     return z
