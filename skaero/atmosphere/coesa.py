@@ -24,7 +24,7 @@ from __future__ import division, absolute_import
 
 import numpy as np
 
-R_Earth = 6369.0e3  # m
+R_Earth = 6356.766e3  # m (polar radius)
 
 g_0p = 9.80665  # m / s^2
 M_0 = 28.9644e-3  # kg / mol
