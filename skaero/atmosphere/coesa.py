@@ -24,9 +24,7 @@ Notes
 Based on the U.S. 1976 Standard Atmosphere.
 
 .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/search.jsp?R=19770009\
-539&hterms=standard+atmosphere&qs=N%3D0%26Ntk%3DAll%26Ntt%3Dstandard%2520atmosp\
-here%26Ntx%3Dmode%2520matchallpartial%26Nm%3D123%7CCollection%7CNASA%2520STI%7C\
-%7C17%7CCollection%7CNACA
+539
 
 """
 
@@ -48,10 +46,10 @@ Rs = 8.31432  # N m / (mol K), WARNING : different from the the 2010 CODATA
 # Recommended Values of the Fundamental Physical Constants
 
 # set of geopotential heights from table 2 of Notes reference
-H = np.array([0., 11.0, 20.0, 32., 47., 51., 71.00, 84.85205])*10**3  # m
+H = np.array([0., 11.0, 20.0, 32., 47., 51., 71.00, 84.85205])*1e3  # m
 
 # set of molecular-scale temperature gradients from table 2 of Notes reference
-LM = np.array([-6.5, 0., 1., 2.8, 0., -2.8, -2., 0.])*10**(-3)  # K / m
+LM = np.array([-6.5, 0., 1., 2.8, 0., -2.8, -2., 0.])*1e-3  # K / m
 
 f_LM = interpolate.interp1d(H, LM, kind='zero')
 
@@ -59,7 +57,7 @@ f_LM = interpolate.interp1d(H, LM, kind='zero')
 T_0 = 288.15  # K
 
 # mean molecular-weight at sea-level
-M_0 = 28.9644*10**(-3)  # kg / mol
+M_0 = 28.9644e-3  # kg / mol
 
 # set of geopotential heights from table 8 of Notes reference 
 H2 = np.array([0., 79005.7, 79493.3, 79980.8, 80468.2, 80955.7, 81443.0,
@@ -105,7 +103,7 @@ def table(x, kind='geopotential'):
     x : array_like
        Geopotential or geometric altitude (depending on kind) given in meters.
     kind : str
-       Specifies the kind of interpolation as altitude x ('geopotential' or \
+       Specifies the kind of interpolation as altitude x ('geopotential' or 
 'geometric'). Default is 'geopotential'
 
     Returns
@@ -124,9 +122,7 @@ def table(x, kind='geopotential'):
     Based on the U.S. 1976 Standard Atmosphere.
 
     .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/search.jsp?R=1977\
-0009539&hterms=standard+atmosphere&qs=N%3D0%26Ntk%3DAll%26Ntt%3Dstandard%25\
-20atmosphere%26Ntx%3Dmode%2520matchallpartial%26Nm%3D123%7CCollection%7CNAS\
-A%2520STI%7C%7C17%7CCollection%7CNACA
+0009539
 
     """
     
@@ -184,7 +180,7 @@ A%2520STI%7C%7C17%7CCollection%7CNACA
 
 
 def temperature(x, kind='geopotential'):
-    """Computes air temperature for a given altitude using the U.S. standard \
+    """Computes air temperature for a given altitude using the U.S. standard 
 atmosphere model
 
     Parameters
@@ -192,7 +188,7 @@ atmosphere model
     x : array_like
        Geopotential or geometric altitude (depending on kind) given in meters.
     kind : str
-       Specifies the kind of interpolation as altitude x ('geopotential' or \
+       Specifies the kind of interpolation as altitude x ('geopotential' or 
 'geometric'). Default is 'geopotential'
 
     Returns
@@ -205,9 +201,7 @@ atmosphere model
     Based on the U.S. 1976 Standard Atmosphere.
 
     .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/search.jsp?R=1977\
-0009539&hterms=standard+atmosphere&qs=N%3D0%26Ntk%3DAll%26Ntt%3Dstandard%25\
-20atmosphere%26Ntx%3Dmode%2520matchallpartial%26Nm%3D123%7CCollection%7CNAS\
-A%2520STI%7C%7C17%7CCollection%7CNACA
+0009539
 
     """
     
@@ -216,7 +210,7 @@ A%2520STI%7C%7C17%7CCollection%7CNACA
 
 
 def pressure(x, kind='geopotential'):
-    """Computes absolute pressure for a given altitude using the U.S. standard \
+    """Computes absolute pressure for a given altitude using the U.S. standard 
 atmosphere model
 
     Parameters
@@ -224,7 +218,7 @@ atmosphere model
     x : array_like
        Geopotential or geometric altitude (depending on kind) given in meters.
     kind : str
-       Specifies the kind of interpolation as altitude x ('geopotential' or \
+       Specifies the kind of interpolation as altitude x ('geopotential' or 
 'geometric'). Default is 'geopotential'
 
     Returns
@@ -237,9 +231,7 @@ atmosphere model
     Based on the U.S. 1976 Standard Atmosphere.
 
     .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/search.jsp?R=1977\
-0009539&hterms=standard+atmosphere&qs=N%3D0%26Ntk%3DAll%26Ntt%3Dstandard%25\
-20atmosphere%26Ntx%3Dmode%2520matchallpartial%26Nm%3D123%7CCollection%7CNAS\
-A%2520STI%7C%7C17%7CCollection%7CNACA
+0009539
 
     """
     
@@ -248,7 +240,7 @@ A%2520STI%7C%7C17%7CCollection%7CNACA
 
 
 def density(x, kind='geopotential'):
-    """Computes air mass density for a given altitude using the U.S. standard \
+    """Computes air mass density for a given altitude using the U.S. standard 
 atmosphere model
 
     Parameters
@@ -256,7 +248,7 @@ atmosphere model
     x : array_like
        Geopotential or geometric altitude (depending on kind) given in meters.
     kind : str
-       Specifies the kind of interpolation as altitude x ('geopotential' or \
+       Specifies the kind of interpolation as altitude x ('geopotential' or 
 'geometric'). Default is 'geopotential'
 
     Returns
@@ -269,9 +261,7 @@ atmosphere model
     Based on the U.S. 1976 Standard Atmosphere.
 
     .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/search.jsp?R=1977\
-0009539&hterms=standard+atmosphere&qs=N%3D0%26Ntk%3DAll%26Ntt%3Dstandard%25\
-20atmosphere%26Ntx%3Dmode%2520matchallpartial%26Nm%3D123%7CCollection%7CNAS\
-A%2520STI%7C%7C17%7CCollection%7CNACA
+0009539
 
     """
 

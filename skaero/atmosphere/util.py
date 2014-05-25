@@ -10,7 +10,7 @@ from __future__ import division, absolute_import
 import numpy as np
 
 # effective earth's radius
-R_Earth = 6356.7660*10**3  # m
+R_Earth = 6356.7660e3  # m
 
 def geometric_to_geopotential(z):
     """Returns geopotential altitude from geometric altitude.
@@ -50,9 +50,7 @@ def geopotential_to_geometric(h):
     Based on eq. 19 of the U.S. 1976 Standard Atmosphere.
 
     .. _`U.S. 1976 Standard Atmosphere`: http://ntrs.nasa.gov/search.jsp?R=1977\
-0009539&hterms=standard+atmosphere&qs=N%3D0%26Ntk%3DAll%26Ntt%3Dstandard%25\
-20atmosphere%26Ntx%3Dmode%2520matchallpartial%26Nm%3D123%7CCollection%7CNAS\
-A%2520STI%7C%7C17%7CCollection%7CNACA
+0009539
 
     """
 
