@@ -55,9 +55,6 @@ LM = np.array([-6.5, 0., 1., 2.8, 0., -2.8, -2., 0.])*10**(-3)  # K / m
 
 f_LM = interpolate.interp1d(H, LM, kind='zero')
 
-# effective earth's radius
-r_e = 6356.7660*10**3  # m
-
 # K, standard sea-level temperature
 T_0 = 288.15  # K
 
