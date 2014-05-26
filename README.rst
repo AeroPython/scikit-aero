@@ -127,7 +127,7 @@ Some applied examples are in the folder `examples` in the IPython notebook
 format. To see them without running locally, use `nbviewer`_; for example,
 to see the `cd_nozzle.ipynb` notebook, browse to
 
-http://nbviewer.ipython.org/url/raw.github.com/Pybonacci/scikit-aero/master/examples/cd_nozzle.ipynb
+http://nbviewer.ipython.org/url/raw.github.com/Pybonacci/scikit-aero/master/examples/Oblique%20shocks%20chart.ipynb
 
 .. _`nbviewer`: http://nbviewer.ipython.org/
 
