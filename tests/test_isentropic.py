@@ -90,7 +90,7 @@ def test_PrandtlMeyerExpansion_raises_error_when_Mach_is_subsonic():
     wrong_mach = 0.9
     with pytest.raises(ValueError) as excinfo:
         isentropic.PrandtlMeyerExpansion.nu(wrong_mach)
-    assert excinfo.exconly().startswith("ValueError: Mach number must"
+    assert excinfo.exconly().startswith("ValueError: Mach number must "
                                         "be supersonic")
 
 
