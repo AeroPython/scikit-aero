@@ -16,7 +16,7 @@ from numpy.testing import (assert_equal, assert_almost_equal,
 import scipy as sp
 import scipy.constants
 
-from skaero.atmosphere import coesa
+from skaero.atmosphere import coesa, util
 
 
 def test_sea_level():
@@ -75,7 +75,7 @@ def test_sea_level_nd_array():
 
 def test_geometric_to_geopotential():
     z = np.array([50.0, 5550.0, 10450.0])
-    h = coesa.geometric_to_geopotential(z)
+    h = util.geometric_to_geopotential(z)
     expected_h = np.array([50.0, 5545.0, 10433.0])
     assert_array_almost_equal(h, expected_h, decimal=0)
 
@@ -85,7 +85,7 @@ def test_under_1000m():
 
     """
     z = np.array([50.0, 550.0, 850.0])
-    h = coesa.geometric_to_geopotential(z)
+    h = util.geometric_to_geopotential(z)
     expected_h = np.array([50.0, 550.0, 850.0])
     expected_T = np.array([287.825, 284.575, 282.626])
     expected_p = np.array([100720.0, 94890.0, 91523.0])
@@ -100,11 +100,11 @@ def test_under_1000m():
 
 
 def test_under_11km():
-    """Tests for altitude values under 11 km (first layer)
+    """Tests for altitude values between 1 and 11 km
 
     """
     z = np.array([500.0, 2500.0, 6500.0, 9000.0, 11000.0])
-    h = coesa.geometric_to_geopotential(z)
+    h = util.geometric_to_geopotential(z)
     expected_h = np.array([500.0, 2499.0, 6493.0, 8987.0, 10981.0])
     expected_T = np.array([284.900, 271.906, 245.943, 229.733, 216.774])
     expected_p = np.array([95461.0, 74691.0, 44075.0, 30800.0, 22699.0])
@@ -116,3 +116,41 @@ def test_under_11km():
     assert_array_almost_equal(T, expected_T, decimal=3)
     assert_array_almost_equal(p, expected_p, decimal=0)
     assert_array_almost_equal(rho, expected_rho, decimal=4)
+
+
+def test_under_35km():
+    """Tests for altitude values between 11 and 35 km
+
+    """
+    z = np.array([15000.0, 25000.0, 35000.0])
+    h = util.geometric_to_geopotential(z)
+    expected_h = np.array([14965.0, 24902., 34808.0])
+    expected_T = np.array([216.65, 221.552, 236.513])
+    expected_p = np.array([12111.0, 2549.2, 574.59])
+    expected_rho = np.array([0.19476, 0.040084, 0.0084634])
+
+    h, T, p, rho = coesa.table(h)
+    
+    assert_array_almost_equal(h, expected_h, decimal=0)
+    assert_array_almost_equal(T, expected_T, decimal=3)
+    assert_array_almost_equal(p, expected_p, decimal=0)
+    assert_array_almost_equal(rho, expected_rho, decimal=5)
+
+
+def test_under_86km():
+    """Tests for altitude values between 35 and 86 km
+
+    """
+    z = np.array([50000.0, 70000.0, 86000.0])
+    h = util.geometric_to_geopotential(z)
+    expected_h = np.array([49610.0, 69238., 84852.0])
+    expected_T = np.array([270.65, 219.585, 186.87])
+    expected_p = np.array([79.779, 5.2209, 0.37338])
+    expected_rho = np.array([0.0010269, 0.000082829, 0.000006958])
+
+    h, T, p, rho = coesa.table(h)
+    
+    assert_array_almost_equal(h, expected_h, decimal=0)
+    assert_array_almost_equal(T, expected_T, decimal=2)
+    assert_array_almost_equal(p, expected_p, decimal=3)
+    assert_array_almost_equal(rho, expected_rho, decimal=7)
