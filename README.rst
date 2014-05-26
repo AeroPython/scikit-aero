@@ -11,9 +11,9 @@ calculations. It is based on several existing Python packages on the field,
 but intends to provide pythonic syntax, use of SI units and full NumPy arrays
 support among other things. scikit-aero is licensed under the BSD license.
 
-It was started by Juan Luis Cano in 2012 and it is currently developed and
-maintained by him. The source code and issue tracker are both hosted on
-GitHub
+It was started by Juan Luis Cano in 2012 and has code from several
+contributors (see AUTHORS). The source code and issue tracker are both hosted
+on GitHub
 
 https://github.com/Pybonacci/scikit-aero
 
@@ -29,13 +29,12 @@ Features
 * Full support of NumPy arrays.
 * Support for both Python 2 and 3.
 * Fully tested and documented.
-* Standard atmosphere properties up to 11 kilometers (troposphere).
+* Standard atmosphere properties up to 86 kilometers.
 * Gas dynamics calculations.
 
 Future
 ------
 
-* Full COESA model.
 * Airspeed conversions.
 * Coordinate systems.
 * Most of the PDAS.
@@ -162,8 +161,3 @@ See also
 .. _Aerocalc: http://pypi.python.org/pypi/AeroCalc/0.11
 .. _`MATLAB Aerospace Toolbox`: http://www.mathworks.com/help/aerotbx/index.html
 .. _PDAS: http://www.pdas.com/index.html
-
-FAQ
-===
-
-Will you finish?
