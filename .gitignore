@@ -1,0 +1,5 @@
+*.pyc
+*.swp
+*.swo
+.spyder*
+scikit_aero.egg-info/*
