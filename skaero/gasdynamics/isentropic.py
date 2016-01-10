@@ -26,7 +26,6 @@ from __future__ import division, absolute_import
 
 import numpy as np
 import scipy as sp
-import scipy.optimize
 
 from skaero.util.decorators import implicit
 
@@ -95,6 +94,47 @@ def mach_from_area_ratio(A_Astar, fl=None):
         M_sup = sp.optimize.newton(eq, 2.0, args=(A_Astar,))
 
     return M_sub, M_sup
+
+
+def mach_from_nu(nu, in_radians=True, gamma=1.4):
+    """Computes the Mach number given a Prandtl-Meyer angle, :math:`\nu`.
+
+    Uses the relation between Mach number and Prandtl-Meyer angle for
+    isentropic flow, to iteratively compute and return the Mach number.
+
+    Parameters
+    ----------
+    nu : float
+        Prandtl-Meyer angle, by default in radians.
+    in_radians : bool, optional
+        When set as False, converts nu from degrees to radians.
+    gamma : float, optional
+        Specific heat ratio.
+
+    Returns
+    -------
+    M : float
+        Mach number corresponding to :math:`\nu`.
+
+    Raises
+    ------
+    ValueError
+        If :math:`\nu` is 0 or negative or above the theoretical maxima based on
+        :math:`\gamma`.
+
+    """
+    if not in_radians:
+        nu = np.radians(nu)
+
+    nu_max = np.pi / 2. * (np.sqrt((gamma + 1.) / (gamma - 1.)) - 1)
+    if(nu <= 0.0 or nu >= nu_max):
+        raise ValueError("Prandtl-Meyer angle must be between (0, %f) radians."
+                         % nu_max)
+
+    eq = implicit(PrandtlMeyerExpansion.nu)
+    M = sp.optimize.newton(eq, 2.0, args=(nu,))
+
+    return M
 
 
 class IsentropicFlow(object):
@@ -199,7 +239,7 @@ class PrandtlMeyerExpansion(object):
     """
     @staticmethod
     def nu(M, gamma=1.4):
-        """Turn angle given Mach number.
+        """Prandtl-Meyer angle for a given Mach number.
 
         The result is given by evaluating the Prandtl-Meyer function.
 
@@ -213,7 +253,7 @@ class PrandtlMeyerExpansion(object):
         Returns
         -------
         nu : float
-            Turn angle, in radians.
+            Prandtl-Meyer angle, in radians.
 
         Raises
         ------
@@ -231,17 +271,19 @@ class PrandtlMeyerExpansion(object):
             raise ValueError("Mach number must be supersonic")
         return nu
 
-    def __init__(self, M_1, nu, fl=None):
+    def __init__(self, M_1, theta, fl=None, gamma=1.4):
         """Constructor of PrandtlMeyerExpansion.
 
         Parameters
         ----------
         M_1 : float
             Upstream Mach number.
-        nu : float
+        theta : float
             Deflection angle, in radians.
         fl : IsentropicFlow, optional.
-            Flow to be expanded, default flow with gamma = 7 / 5.
+            Flow to be expanded
+        gamma : float, optional
+            Specific heat ratio, default value = 7 / 5.
 
         Raises
         ------
@@ -250,29 +292,32 @@ class PrandtlMeyerExpansion(object):
 
         """
         if not fl:
-            fl = IsentropicFlow(gamma=1.4)
+            fl = IsentropicFlow(gamma=gamma)
         nu_max = (
             PrandtlMeyerExpansion.nu(np.inf, fl.gamma) -
             PrandtlMeyerExpansion.nu(M_1, fl.gamma))
-        if nu > nu_max:
+        if theta > nu_max:
             raise ValueError(
                 "Deflection angle must be lower than maximum {:.2f}°"
                 .format(np.degrees(nu_max)))
         self.M_1 = M_1
-        self.nu = nu
+        self.theta = theta
         self.fl = fl
+
+    @property
+    def nu_1(self):
+        return PrandtlMeyerExpansion.nu(self.M_1, self.fl.gamma)
+
+    @property
+    def nu_2(self):
+        return self.nu_1 + self.theta
 
     @property
     def M_2(self):
         """Downstream Mach number.
 
         """
-        def eq(M, nu, gamma):
-            return PrandtlMeyerExpansion.nu(M, gamma) - nu
-
-        nu_2 = self.nu + PrandtlMeyerExpansion.nu(self.M_1, self.fl.gamma)
-        M_2 = sp.optimize.newton(eq, self.M_1, args=(nu_2, self.fl.gamma))
-        return M_2
+        return mach_from_nu(nu=self.nu_2, gamma=self.fl.gamma)
 
     @property
     def mu_1(self):
@@ -303,3 +348,10 @@ class PrandtlMeyerExpansion(object):
         """
         T2_T1 = self.fl.T_T0(self.M_2) / self.fl.T_T0(self.M_1)
         return T2_T1
+
+    @property
+    def rho2_rho1(self):
+        """Density ratio across the expansion fan.
+
+        """
+        return self.p2_p1 / self.T2_T1
