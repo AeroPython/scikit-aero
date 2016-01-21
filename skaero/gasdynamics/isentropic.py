@@ -306,10 +306,12 @@ class PrandtlMeyerExpansion(object):
 
     @property
     def nu_1(self):
+        """Upstream Prandtl-Meyer angle."""
         return PrandtlMeyerExpansion.nu(self.M_1, self.fl.gamma)
 
     @property
     def nu_2(self):
+        """Downstream Prandtl-Meyer angle."""
         return self.nu_1 + self.theta
 
     @property
