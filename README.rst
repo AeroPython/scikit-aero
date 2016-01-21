@@ -6,6 +6,10 @@ scikit-aero
 :Author: Juan Luis Cano <juanlu001@gmail.com> and others (see AUTHORS)
 :Version: 0.2-dev
 
+.. image:: http://unmaintained.tech/badge.svg
+   :target: http://unmaintained.tech/
+   :alt: No Maintenance Intended
+
 scikit-aero is a Python package for various aeronautical engineering
 calculations. It is based on several existing Python packages on the field,
 but intends to provide pythonic syntax, use of SI units and full NumPy arrays
