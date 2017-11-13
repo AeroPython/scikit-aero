@@ -2,9 +2,10 @@ scikit-aero
 ===========
 
 :Name: scikit-aero
-:Website: https://github.com/Pybonacci/scikit-aero
-:Author: Juan Luis Cano <juanlu001@gmail.com> and others (see AUTHORS)
-:Version: 0.2-dev
+:Description: Aeronautical engineering calculations in Python
+:Website: https://github.com/AeroPython/scikit-aero
+:Author: AeroPython Team <aeropython@groups.io>
+:Version: 0.2.dev0
 
 .. image:: http://unmaintained.tech/badge.svg
    :target: http://unmaintained.tech/
@@ -18,8 +19,6 @@ support among other things. scikit-aero is licensed under the BSD license.
 It was started by Juan Luis Cano in 2012 and has code from several
 contributors (see AUTHORS). The source code and issue tracker are both hosted
 on GitHub
-
-https://github.com/Pybonacci/scikit-aero
 
 **Notice**: This package is under heavy development and the API might change
 at any time until a 1.0 version is reached. It is stable but not feaure

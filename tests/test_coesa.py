@@ -19,13 +19,18 @@ import scipy.constants
 from skaero.atmosphere import coesa, util
 
 
+def _C2K(val):
+    """Convert Celsius to Kelvins."""
+    return scipy.constants.convert_temperature([val], 'C', 'K')
+
+
 def test_sea_level():
     """Tests sea level values.
 
     """
     h = 0.0
     expected_h = 0.0
-    expected_T = sp.constants.C2K(15)
+    expected_T = _C2K(15)
     expected_p = sp.constants.atm
     expected_rho = 1.2250
 
@@ -43,7 +48,7 @@ def test_sea_level_0d_array():
     """
     h = np.array(0.0)
     expected_h = np.array(0.0)
-    expected_T = np.array(sp.constants.C2K(15))
+    expected_T = np.array(_C2K(15))
     expected_p = np.array(sp.constants.atm)
     expected_rho = np.array(1.2250)
 

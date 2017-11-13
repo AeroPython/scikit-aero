@@ -69,7 +69,7 @@ def test_default_gamma_for_new_IsentropicFlow():
 def test_PrandtlMeyerExpansion_example():
     # Example 4.13 from Anderson. Default gamma=1.4 used
     fl = isentropic.IsentropicFlow()
-    pm = isentropic.PrandtlMeyerExpansion(M_1=1.5, nu=np.radians(20), fl=fl)
+    pm = isentropic.PrandtlMeyerExpansion(M_1=1.5, theta=np.radians(20), fl=fl)
     np.testing.assert_almost_equal(pm.M_2, 2.207, decimal=3)
     np.testing.assert_almost_equal(pm.p2_p1, 0.340, decimal=3)
     np.testing.assert_almost_equal(pm.T2_T1, 0.735, decimal=3)

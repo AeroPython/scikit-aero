@@ -13,5 +13,4 @@ gasdynamics
     Gas dynamics calculations.
 
 """
-
-__version__ = '0.2-dev'
+from .version import __version__

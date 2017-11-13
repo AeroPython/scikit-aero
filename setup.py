@@ -1,8 +1,10 @@
 # coding: utf-8
+from runpy import run_path
+from setuptools import setup
 
-from distutils.core import setup
-
-from skaero import __version__
+# Get the version from the relevant file
+d = run_path('skaero/version.py')
+__version__ = d['__version__']
 
 setup(
     name="scikit-aero",

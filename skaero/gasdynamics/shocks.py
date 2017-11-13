@@ -28,7 +28,7 @@ import numpy as np
 import scipy as sp
 import scipy.optimize
 
-from skaero.gasdynamics.isentropic import mach_angle
+from skaero.gasdynamics.isentropic import mach_angle, IsentropicFlow
 
 
 # Exceptions used in this module
@@ -247,3 +247,25 @@ class _ShockClass(object):
         """
         T2_T1 = self.p2_p1 / self.rho2_rho1
         return T2_T1
+
+    def p02_p01(self, fl=None):
+        """Stagnation pressure ratio across the shock.
+
+        Parameters
+        ----------
+        M_1 : float, optional
+            Mach number behind the shock.
+        fl : IsentropicFlow, optional
+            To calculate stagnation conditions behind and after the shock.
+
+        Returns
+        -------
+        p02_p01 : float
+            Stagnation pressure ratio.
+
+        """
+        if fl is None:
+            fl = IsentropicFlow(gamma=self.gamma)
+
+        p02_p01 = fl.p_p0(self.M_1) / fl.p_p0(self.M_2) * self.p2_p1
+        return p02_p01
