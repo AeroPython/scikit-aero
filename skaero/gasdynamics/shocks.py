@@ -25,8 +25,7 @@ from __future__ import division, absolute_import
 import inspect
 
 import numpy as np
-import scipy as sp
-import scipy.optimize
+from scipy import optimize
 
 from skaero.gasdynamics.isentropic import mach_angle, IsentropicFlow
 
@@ -59,7 +58,7 @@ def max_deflection(M_1, gamma=1.4):
         return -os.theta
 
     mu = mach_angle(M_1)
-    beta_theta_max = sp.optimize.fminbound(
+    beta_theta_max = optimize.fminbound(
         eq, mu, np.pi / 2, args=(M_1, gamma), disp=0)
     os = _ShockClass(M_1, beta_theta_max, gamma)
     return os.theta, os.beta
@@ -106,7 +105,7 @@ def _ShockFactory(**kwargs):
         params = kwargs.viewkeys()
     except AttributeError:
         params = kwargs.keys()
-    if not 'theta' in params:
+    if 'theta' not in params:
         kwargs.setdefault('beta', np.pi / 2)
         # ['X', 'beta', 'gamma']
         if len(params) != 3:
@@ -157,10 +156,10 @@ def _from_deflection_angle(M_1, theta, weak, gamma):
     else:
         if weak:
             mu = mach_angle(M_1)
-            beta = sp.optimize.bisect(
+            beta = optimize.bisect(
                 eq, mu, beta_theta_max, args=(M_1, theta, gamma))
         else:
-            beta = sp.optimize.bisect(
+            beta = optimize.bisect(
                 eq, beta_theta_max, np.pi / 2, args=(M_1, theta, gamma))
 
     return _ShockClass(M_1, beta, gamma)
@@ -248,6 +247,7 @@ class _ShockClass(object):
         T2_T1 = self.p2_p1 / self.rho2_rho1
         return T2_T1
 
+    @property
     def p02_p01(self, fl=None):
         """Stagnation pressure ratio across the shock.
 
@@ -269,3 +269,20 @@ class _ShockClass(object):
 
         p02_p01 = fl.p_p0(self.M_1) / fl.p_p0(self.M_2) * self.p2_p1
         return p02_p01
+
+    @property
+    def rho02_rho01(self, fl=None):
+        """Stagnation density ratio across the shock."""
+        if fl is None:
+            fl = IsentropicFlow(gamma=self.gamma)
+
+        rho02_rho01 = (
+            fl.rho_rho0(self.M_1) / fl.rho_rho0(self.M_2) * self.rho2_rho1)
+
+        return rho02_rho01
+
+    @property
+    def T02_T01(self):
+        """Stagnation temperature ratio across the shock."""
+        T02_T01 = self.p02_p01 / self.rho02_rho01
+        return T02_T01
