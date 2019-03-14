@@ -1,5 +1,9 @@
+.. image:: doc/source/img/logo.png
+        :align: center
+
 scikit-aero
 ===========
+
 
 :Name: scikit-aero
 :Description: Aeronautical engineering calculations in Python
@@ -41,23 +45,29 @@ Future
 Usage
 =====
 
-Atmosphere properties::
+Atmosphere properties:
 
-  >>> from skaero.atmosphere import coesa
-  >>> h, T, p, rho = coesa.table(1000)  # Altitude by default, 1 km
+.. code-block:: python
 
-Inverse computations allowed with density and pressure, which are monotonic::
+        from skaero.atmosphere import coesa
+        h, T, p, rho = coesa.table(1000)  # Altitude by default, 1 km
 
-  >>> h, T, p, rho = coesa.table(p=101325)  # Pressure of 1 atm
+Inverse computations allowed with density and pressure, which are monotonic:
 
-Gas dynamics calculations::
+.. code-block:: python
 
-  >>> from skaero.gasdynamics import isentropic, shocks
-  >>> fl = isentropic.IsentropicFlow(gamma=1.4)
-  >>> p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
-  >>> ns = shocks.Shock(M_1=2.5, gamma=1.4)
-  >>> M_2 = ns.M_2  # Mach number behind a normal shock wave
-  >>> os = shocks.Shock(M_1=3.0, theta=np.radians(25), weak=True)
+        h, T, p, rho = coesa.table(p=101325)  # Pressure of 1 atm
+
+Gas dynamics calculations:
+
+.. code-block:: python
+
+        from skaero.gasdynamics import isentropic, shocks
+        fl = isentropic.IsentropicFlow(gamma=1.4)
+        p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
+        ns = shocks.Shock(M_1=2.5, gamma=1.4)
+        M_2 = ns.M_2  # Mach number behind a normal shock wave
+        os = shocks.Shock(M_1=3.0, theta=np.radians(25), weak=True)
 
 Dependencies
 ============
