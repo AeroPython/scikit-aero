@@ -141,6 +141,15 @@ def test_mach_from_area_ratio_raises_error_when_ratio_is_subsonic():
     with pytest.raises(ValueError):
         isentropic.mach_from_area_ratio(0.9)
 
+def test_speed_of_sound_ratio():
+    fl = isentropic.IsentropicFlow(1.4)
+    M_list = [0.0, 0.3, 1.0, 1.3, 2.5]
+    expected_sound_speed_ratios = [1.0, 0.99112, 0.91287, 0.86451, 0.6667]
+
+    np.testing.assert_array_almost_equal(
+        fl.a_a0(M_list), expected_sound_speed_ratios, decimal=3
+    )
+
 
 def test_mach_from_area_ratio_subsonic():
     fl = isentropic.IsentropicFlow(1.4)
