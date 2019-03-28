@@ -232,6 +232,24 @@ class IsentropicFlow(object):
             )
         return A_Astar
 
+    def a_a0(self, M):
+        """ Speed of sound ratio from Mach number.
+
+        Parameters
+        ----------
+        M: array_like
+            Mach number.
+
+        Returns
+        -------
+        a_a0: array_like
+            Speed of sound ratio.
+        """
+
+        M = np.asarray(M)
+        a_a0 = self.T_T0(M) ** 0.5
+
+        return a_a0
 
 class PrandtlMeyerExpansion(object):
     """Class representing a Prandtl-Meyer expansion fan.
