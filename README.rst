@@ -116,9 +116,11 @@ version of IPython and its dependencies.
 Install
 =======
 
-This package uses distutils. To install, execute as usual::
+This package uses distutils. To install, execute as usual:
 
-  $ python setup.py install
+.. code-block::
+
+        $ python setup.py install
 
 It is recommended that you **never ever use sudo** with distutils, pip,
 setuptools and friends in Linux because you might seriously break your
@@ -138,13 +140,17 @@ Testing
 =======
 
 scikit-aero recommends py.test for running the test suite. Running from the
-top directory::
+top directory:
 
-  $ py.test
+.. code-block:: bash
 
-To test code coverage, make sure you install `py.test-cov`_ extension and run::
+        $ py.test
 
-  $ py.test --cov skaero/
+To test code coverage, make sure you install `py.test-cov`_ extension and run:
+
+.. code-block:: bash
+
+        $ py.test --cov skaero/
 
 .. _`py.test-cov`: https://pypi.python.org/pypi/pytest-cov
 
