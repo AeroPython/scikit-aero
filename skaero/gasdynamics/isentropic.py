@@ -1,26 +1,4 @@
-# coding: utf-8
-
-"""
-Isentropic relations.
-
-Routines
---------
-mach_angle(M)
-prandtl_meyer_function(M, fl=None)
-mach_from_area_ratio(fl, A_Astar)
-
-Classes
--------
-IsentropicFlow(gamma)
-PrandtlMeyerExpansion(M_1, nu, fl=None)
-
-Examples
---------
->>> from skaero.gasdynamics import isentropic
->>> fl = IsentropicFlow(gamma=1.4)
->>> _, M = isentropic.mach_from_area_ratio(2.5, fl)
-
-"""
+""" Isentropic properties. """
 
 from __future__ import division, absolute_import
 
@@ -31,7 +9,11 @@ from skaero.util.decorators import implicit
 
 
 def mach_angle(M):
-    """Returns Mach angle given supersonic Mach number.
+    r"""Returns Mach angle given supersonic Mach number.
+
+    .. math::
+
+        \mu = \arcsin{\left ( \frac{1}{M} \right )}
 
     Parameters
     ----------
@@ -97,7 +79,7 @@ def mach_from_area_ratio(A_Astar, fl=None):
 
 
 def mach_from_nu(nu, in_radians=True, gamma=1.4):
-    """Computes the Mach number given a Prandtl-Meyer angle, :math:`\nu`.
+    r"""Computes the Mach number given a Prandtl-Meyer angle, :math:`\nu`.
 
     Uses the relation between Mach number and Prandtl-Meyer angle for
     isentropic flow, to iteratively compute and return the Mach number.
@@ -126,10 +108,11 @@ def mach_from_nu(nu, in_radians=True, gamma=1.4):
     if not in_radians:
         nu = np.radians(nu)
 
-    nu_max = np.pi / 2. * (np.sqrt((gamma + 1.) / (gamma - 1.)) - 1)
-    if(nu <= 0.0 or nu >= nu_max):
-        raise ValueError("Prandtl-Meyer angle must be between (0, %f) radians."
-                         % nu_max)
+    nu_max = np.pi / 2.0 * (np.sqrt((gamma + 1.0) / (gamma - 1.0)) - 1)
+    if nu <= 0.0 or nu >= nu_max:
+        raise ValueError(
+            "Prandtl-Meyer angle must be between (0, %f) radians." % nu_max
+        )
 
     eq = implicit(PrandtlMeyerExpansion.nu)
     M = sp.optimize.newton(eq, 2.0, args=(nu,))
@@ -138,9 +121,15 @@ def mach_from_nu(nu, in_radians=True, gamma=1.4):
 
 
 class IsentropicFlow(object):
-    """Class representing an isentropic flow.
+    """Class representing an isentropic gas flow.
+
+    Isentropic flow is characterized by:
+
+    * Viscous and heat conductivity effects are negligible.
+    * No chemical or radioactive heat production.
 
     """
+
     def __init__(self, gamma=1.4):
         """Constructor of IsentropicFlow.
 
@@ -153,7 +142,10 @@ class IsentropicFlow(object):
         self.gamma = gamma
 
     def p_p0(self, M):
-        """Pressure ratio from Mach number.
+        r"""Pressure ratio from Mach number.
+
+        .. math::
+            \left ( \frac{P}{P_{0}} \right ) = \left ( \frac{T}{T_{0}} \right )^{\frac{\gamma}{(\gamma - 1)}}
 
         Parameters
         ----------
@@ -166,12 +158,17 @@ class IsentropicFlow(object):
             Pressure ratio.
 
         """
+
         M = np.asanyarray(M)
         p_p0 = self.T_T0(M) ** (self.gamma / (self.gamma - 1))
+
         return p_p0
 
     def rho_rho0(self, M):
-        """Density ratio from Mach number.
+        r"""Density ratio from Mach number.
+
+        .. math::
+            \left ( \frac{\rho}{\rho_{0}} \right ) = \left ( \frac{T}{T_{0}} \right )^{\frac{1}{(\gamma - 1)}}
 
         Parameters
         ----------
@@ -184,12 +181,16 @@ class IsentropicFlow(object):
             Density ratio.
 
         """
+
         M = np.asanyarray(M)
         rho_rho0 = self.T_T0(M) ** (1 / (self.gamma - 1))
         return rho_rho0
 
     def T_T0(self, M):
-        """Temperature ratio from Mach number.
+        r"""Temperature ratio from Mach number.
+
+        .. math::
+            \left ( \frac{T}{T_{0}} \right ) = \left (1 + \frac{\gamma - 1}{2}M^{2} \right )^{-1}
 
         Parameters
         ----------
@@ -225,11 +226,10 @@ class IsentropicFlow(object):
         M = np.asanyarray(M)
         # If there is any zero entry, NumPy array division gives infinity,
         # which is correct.
-        with np.errstate(divide='ignore'):
-            A_Astar = (
-                (2 / self.T_T0(M) / (self.gamma + 1)) **
-                ((self.gamma + 1) / (2 * (self.gamma - 1))) / M
-            )
+        with np.errstate(divide="ignore"):
+            A_Astar = (2 / self.T_T0(M) / (self.gamma + 1)) ** (
+                (self.gamma + 1) / (2 * (self.gamma - 1))
+            ) / M
         return A_Astar
 
     def a_a0(self, M):
@@ -251,15 +251,20 @@ class IsentropicFlow(object):
 
         return a_a0
 
+
 class PrandtlMeyerExpansion(object):
     """Class representing a Prandtl-Meyer expansion fan.
 
     """
+
     @staticmethod
     def nu(M, gamma=1.4):
-        """Prandtl-Meyer angle for a given Mach number.
+        r"""Prandtl-Meyer angle for a given Mach number.
 
         The result is given by evaluating the Prandtl-Meyer function.
+
+        .. math::
+            \nu = \sqrt{\frac{\gamma + 1}{\gamma - 1}} \tan^{-1}\left [ \sqrt{\frac{\gamma - 1}{\gamma + 1}(M^{2} - 1)} \right ] - \tan^{-1}(\sqrt{M^{2} - 1})
 
         Parameters
         ----------
@@ -282,9 +287,9 @@ class PrandtlMeyerExpansion(object):
         try:
             with np.errstate(invalid="raise"):
                 sgpgm = np.sqrt((gamma + 1) / (gamma - 1))
-                nu = (
-                    sgpgm * np.arctan(np.sqrt(M * M - 1) / sgpgm) -
-                    np.arctan(np.sqrt(M * M - 1)))
+                nu = sgpgm * np.arctan(np.sqrt(M * M - 1) / sgpgm) - np.arctan(
+                    np.sqrt(M * M - 1)
+                )
         except FloatingPointError:
             raise ValueError("Mach number must be supersonic")
         return nu
@@ -311,13 +316,15 @@ class PrandtlMeyerExpansion(object):
         """
         if not fl:
             fl = IsentropicFlow(gamma=gamma)
-        nu_max = (
-            PrandtlMeyerExpansion.nu(np.inf, fl.gamma) -
-            PrandtlMeyerExpansion.nu(M_1, fl.gamma))
+        nu_max = PrandtlMeyerExpansion.nu(np.inf, fl.gamma) - PrandtlMeyerExpansion.nu(
+            M_1, fl.gamma
+        )
         if theta > nu_max:
             raise ValueError(
-                "Deflection angle must be lower than maximum {:.2f}°"
-                .format(np.degrees(nu_max)))
+                "Deflection angle must be lower than maximum {:.2f}°".format(
+                    np.degrees(nu_max)
+                )
+            )
         self.M_1 = M_1
         self.theta = theta
         self.fl = fl

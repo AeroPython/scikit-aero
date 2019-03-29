@@ -1,15 +1,34 @@
-.. image:: doc/source/img/logo.png
+.. image:: doc/source/_static/logo.png
         :align: center
 
-scikit-aero
-===========
+.. image:: https://img.shields.io/maintenance/yes/2019.svg?style=for-the-badge
+	:target: https://github.com/AeroPython/scikit-aero
+	:alt: Maintenance
 
+.. image:: https://img.shields.io/pypi/l/scikit-aero.svg?style=for-the-badge
+        :target: https://github.com/AeroPython/scikit-aero/blob/master/COPYING
+        :alt: License
+
+.. image:: https://readthedocs.org/projects/pip/badge/?version=latest&style=for-the-badge
+        :target: https://aeropython.github.io/scikit-aero/
+        :alt: Docs
+
+.. image:: https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=for-the-badge
+        :target: aeropython@groups.io
+        :alt: Email
+
+|
 
 :Name: scikit-aero
 :Description: Aeronautical engineering calculations in Python
 :Website: https://github.com/AeroPython/scikit-aero
 :Author: AeroPython Team <aeropython@groups.io>
 :Version: 0.2.dev0
+
+|
+
+Scikit-aero
+-----------
 
 scikit-aero is a Python package for various aeronautical engineering
 calculations. It is based on several existing Python packages on the field,
