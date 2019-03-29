@@ -116,11 +116,17 @@ version of IPython and its dependencies.
 Install
 =======
 
-This package uses distutils. To install, execute as usual:
+To install just execute:
 
-.. code-block::
+.. code-block:: bash
 
-        $ python setup.py install
+        $ pip install scikit-aero
+
+If you want to install the package in development mode, please execute:
+
+.. code-block:: bash
+
+        $ pip install --editable /path_to_scikit-aero
 
 It is recommended that you **never ever use sudo** with distutils, pip,
 setuptools and friends in Linux because you might seriously break your
@@ -144,13 +150,13 @@ top directory:
 
 .. code-block:: bash
 
-        $ py.test
+        $ pytest
 
 To test code coverage, make sure you install `py.test-cov`_ extension and run:
 
 .. code-block:: bash
 
-        $ py.test --cov skaero/
+        $ pytest --cov skaero/
 
 .. _`py.test-cov`: https://pypi.python.org/pypi/pytest-cov
 
