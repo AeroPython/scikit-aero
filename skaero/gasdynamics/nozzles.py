@@ -2,11 +2,6 @@
 
 """
 Utilities for working with nozzles.
-
-Classes
--------
-Nozzle(x, A)
-
 """
 
 from __future__ import division, absolute_import
@@ -20,6 +15,7 @@ class Nozzle(object):
     """Class representing a nozzle.
 
     """
+
     def __init__(self, x, A):
         self.x = x
         self.A = A
@@ -75,8 +71,7 @@ class Nozzle(object):
         """
         p_ratio = p_B / p_0
         if p_ratio > 1.0:
-            raise ValueError(
-                "Back pressure must be lower than reservoir pressure")
+            raise ValueError("Back pressure must be lower than reservoir pressure")
 
         # Exit and minimum area
         A_e = self.A[-1]

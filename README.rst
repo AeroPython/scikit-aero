@@ -1,11 +1,34 @@
-scikit-aero
-===========
+.. image:: doc/source/_static/logo.png
+        :align: center
+
+.. image:: https://img.shields.io/maintenance/yes/2019.svg?style=for-the-badge
+	:target: https://github.com/AeroPython/scikit-aero
+	:alt: Maintenance
+
+.. image:: https://img.shields.io/pypi/l/scikit-aero.svg?style=for-the-badge
+        :target: https://github.com/AeroPython/scikit-aero/blob/master/COPYING
+        :alt: License
+
+.. image:: https://readthedocs.org/projects/pip/badge/?version=latest&style=for-the-badge
+        :target: https://aeropython.github.io/scikit-aero/
+        :alt: Docs
+
+.. image:: https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=for-the-badge
+        :target: aeropython@groups.io
+        :alt: Email
+
+|
 
 :Name: scikit-aero
 :Description: Aeronautical engineering calculations in Python
 :Website: https://github.com/AeroPython/scikit-aero
 :Author: AeroPython Team <aeropython@groups.io>
 :Version: 0.2.dev0
+
+|
+
+Scikit-aero
+-----------
 
 scikit-aero is a Python package for various aeronautical engineering
 calculations. It is based on several existing Python packages on the field,
@@ -41,23 +64,29 @@ Future
 Usage
 =====
 
-Atmosphere properties::
+Atmosphere properties:
 
-  >>> from skaero.atmosphere import coesa
-  >>> h, T, p, rho = coesa.table(1000)  # Altitude by default, 1 km
+.. code-block:: python
 
-Inverse computations allowed with density and pressure, which are monotonic::
+        from skaero.atmosphere import coesa
+        h, T, p, rho = coesa.table(1000)  # Altitude by default, 1 km
 
-  >>> h, T, p, rho = coesa.table(p=101325)  # Pressure of 1 atm
+Inverse computations allowed with density and pressure, which are monotonic:
 
-Gas dynamics calculations::
+.. code-block:: python
 
-  >>> from skaero.gasdynamics import isentropic, shocks
-  >>> fl = isentropic.IsentropicFlow(gamma=1.4)
-  >>> p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
-  >>> ns = shocks.Shock(M_1=2.5, gamma=1.4)
-  >>> M_2 = ns.M_2  # Mach number behind a normal shock wave
-  >>> os = shocks.Shock(M_1=3.0, theta=np.radians(25), weak=True)
+        h, T, p, rho = coesa.table(p=101325)  # Pressure of 1 atm
+
+Gas dynamics calculations:
+
+.. code-block:: python
+
+        from skaero.gasdynamics import isentropic, shocks
+        fl = isentropic.IsentropicFlow(gamma=1.4)
+        p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
+        ns = shocks.Shock(M_1=2.5, gamma=1.4)
+        M_2 = ns.M_2  # Mach number behind a normal shock wave
+        os = shocks.Shock(M_1=3.0, theta=np.radians(25), weak=True)
 
 Dependencies
 ============
@@ -87,9 +116,17 @@ version of IPython and its dependencies.
 Install
 =======
 
-This package uses distutils. To install, execute as usual::
+To install just execute:
 
-  $ python setup.py install
+.. code-block:: bash
+
+        $ pip install scikit-aero
+
+If you want to install the package in development mode, please execute:
+
+.. code-block:: bash
+
+        $ pip install --editable /path_to_scikit-aero
 
 It is recommended that you **never ever use sudo** with distutils, pip,
 setuptools and friends in Linux because you might seriously break your
@@ -109,13 +146,17 @@ Testing
 =======
 
 scikit-aero recommends py.test for running the test suite. Running from the
-top directory::
+top directory:
 
-  $ py.test
+.. code-block:: bash
 
-To test code coverage, make sure you install `py.test-cov`_ extension and run::
+        $ pytest
 
-  $ py.test --cov skaero/
+To test code coverage, make sure you install `py.test-cov`_ extension and run:
+
+.. code-block:: bash
+
+        $ pytest --cov skaero/
 
 .. _`py.test-cov`: https://pypi.python.org/pypi/pytest-cov
 

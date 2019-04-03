@@ -20,7 +20,9 @@ def implicit(f):
     so the equation F(t; x) = 0 gives x = f(t).
 
     """
+
     @wraps(f)
     def _F(t, y):
         return f(t) - y
+
     return _F
