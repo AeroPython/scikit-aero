@@ -4,14 +4,13 @@
 Shock waves.
 """
 
-from __future__ import division, absolute_import
 
 import inspect
 
 import numpy as np
 from scipy import optimize
 
-from skaero.gasdynamics.isentropic import mach_angle, IsentropicFlow
+from skaero.gasdynamics.isentropic import IsentropicFlow, mach_angle
 
 
 # Exceptions used in this module
@@ -61,7 +60,7 @@ def _ShockFactory(**kwargs):
     --------
     >>> ss1 = Shock(M_1=1.5)  # Given upstream Mach number (default beta = 90°)
     >>> ss1.M_2
-    0.70108874169309943
+    0.7010887416930994
     >>> ss1.beta
     1.5707963267948966
     >>> ss1.theta

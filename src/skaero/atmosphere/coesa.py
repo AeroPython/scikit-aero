@@ -7,10 +7,9 @@ COESA model, based on the `U.S. 1976 Standard Atmosphere`_.
 
 """
 
-from __future__ import division, absolute_import
 
 import numpy as np
-from scipy import interpolate, constants
+from scipy import constants, interpolate
 
 from skaero.atmosphere import util
 

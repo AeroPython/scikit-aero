@@ -49,7 +49,6 @@ Features
 * Pythonic interface.
 * Use of SI units.
 * Full support of NumPy arrays.
-* Support for both Python 2 and 3.
 * Fully tested and documented.
 * Standard atmosphere properties up to 86 kilometers.
 * Gas dynamics calculations.

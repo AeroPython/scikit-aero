@@ -1,0 +1,15 @@
+language: generic
+python:
+    - "3.5"
+    - "3.6"
+    - "3.7"
+
+install:
+    - pip install numpy  # Required
+    - pip install .  # Test installation correctness
+    - pip install .[dev]  # Test development dependencies
+
+script:
+  - pytest -vv  # Test against installed code
+
+sudo: false

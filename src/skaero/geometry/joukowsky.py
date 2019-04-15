@@ -1,10 +1,10 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def zeta_coord(radius, centre_chi=0.0, centre_eta=0.0):
     """Transform a cicle into zeta coordinates."""
-    angles = np.linspace(0, 2.0 * pl.pi, 100)
+    angles = np.linspace(0, 2.0 * np.pi, 100)
     chi = radius * np.cos(angles) + centre_chi
     eta = radius * np.sin(angles) + centre_eta
     zeta = chi + 1j * eta

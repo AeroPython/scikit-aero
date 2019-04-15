@@ -4,10 +4,7 @@
 Decorators for multiple purposes.
 
 """
-
-from __future__ import division, absolute_import
-
-from functools import wraps, update_wrapper
+from functools import wraps
 
 
 def implicit(f):
