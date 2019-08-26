@@ -1,6 +1,14 @@
 .. image:: doc/source/_static/logo.png
         :align: center
 
+.. image:: https://img.shields.io/travis/AeroPython/scikit-aero?style=for-the-badge
+        :target: https://travis-ci.org/AeroPython/scikit-aero/
+        :alt: Build
+
+.. image:: https://img.shields.io/codecov/c/github/AeroPython/scikit-aero/master?style=for-the-badge
+        :target: https://codecov.io/gh/AeroPython/scikit-aero
+        :alt: Coverage
+
 .. image:: https://img.shields.io/maintenance/yes/2019.svg?style=for-the-badge
 	:target: https://github.com/AeroPython/scikit-aero
 	:alt: Maintenance
