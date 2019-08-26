@@ -141,6 +141,7 @@ def test_mach_from_area_ratio_raises_error_when_ratio_is_subsonic():
     with pytest.raises(ValueError):
         isentropic.mach_from_area_ratio(0.9)
 
+
 def test_speed_of_sound_ratio():
     fl = isentropic.IsentropicFlow(1.4)
     M_list = [0.0, 0.3, 1.0, 1.3, 2.5]
@@ -153,51 +154,27 @@ def test_speed_of_sound_ratio():
 
 def test_mach_from_area_ratio_subsonic():
     fl = isentropic.IsentropicFlow(1.4)
-    A_Astar_list = [
-        np.inf,
-        2.4027,
-        1.7780,
-        1.0382,
-        1.0,
-    ]
-    expected_ratios = [
-        0.0,
-        0.25,
-        0.35,
-        0.8,
-        1.0
-    ]
-    mach_from_area_ratios = [
-        isentropic.mach_from_area_ratio(A_Astar, fl)[0]  # Subsonic
-        for A_Astar in A_Astar_list]
-    np.testing.assert_array_almost_equal(
-        mach_from_area_ratios, expected_ratios, decimal=3
-    )
+    A_Astar_list = [1e4, 2.4027, 1.7780, 1.0382, 1.0]
+    expected_ratios = [0.0, 0.25, 0.35, 0.8, 1.0]
+
+    mach_from_area_ratios = [isentropic.mach_from_area_ratio(A_Astar, fl)[0]
+                             for A_Astar in A_Astar_list]  # Subsonic
+
+    np.testing.assert_array_almost_equal(mach_from_area_ratios,
+                                         expected_ratios, decimal=3)
 
 
 def test_mach_from_area_ratio_supersonic():
+    #  https://www.engineering.com/calculators/isentropic_flow_relations.htm
     fl = isentropic.IsentropicFlow(1.4)
-    A_Astar_list = [
-        1.0,
-        1.043,
-        1.328,
-        1.902,
-        4.441
-    ]
-    expected_ratios = [
-        1.0,
-        1.24,
-        1.69,
-        2.14,
-        3.05
-    ]
-    mach_from_area_ratios = [
-        isentropic.mach_from_area_ratio(A_Astar, fl)[1]  # Supersonic
-        for A_Astar in A_Astar_list]
+    A_Astar_list = [1.0, 1.043, 1.328, 1.902, 4.441, 1e5]
+    expected_ratios = [1.0, 1.24, 1.69, 2.14, 3.05, 29.199]
 
-    np.testing.assert_array_almost_equal(
-        mach_from_area_ratios, expected_ratios, decimal=2
-    )
+    mach_from_area_ratios = [isentropic.mach_from_area_ratio(A_Astar, fl)[1]
+                             for A_Astar in A_Astar_list]  # Supersonic
+
+    np.testing.assert_array_almost_equal(mach_from_area_ratios,
+                                         expected_ratios, decimal=2)
 
 
 def test_density_ratio():

@@ -66,14 +66,18 @@ def mach_from_area_ratio(A_Astar, fl=None):
     """
     if not fl:
         fl = IsentropicFlow(gamma=1.4)
+
     eq = implicit(fl.A_Astar)
+
     if A_Astar < 1.0:
         raise ValueError("Area ratio must be greater than 1")
     elif A_Astar == 1.0:
         M_sub = M_sup = 1.0
     else:
         M_sub = sp.optimize.bisect(eq, 0.0, 1.0, args=(A_Astar,))
-        M_sup = sp.optimize.newton(eq, 2.0, args=(A_Astar,))
+
+        ic = 100 * np.log(A_Astar) + 1  # improved initial condition
+        M_sup = sp.optimize.newton(eq, ic, args=(A_Astar,))
 
     return M_sub, M_sup
 
