@@ -162,6 +162,77 @@ class Test_ned2ecef(ut.TestCase):
                                     expected_value))
 
 
+class Test_ecef2ned(ut.TestCase):
+    """
+    Test function that transforms ecef-basis vectors to ned-basis
+    """
+    def test_latitude_wrong_input(self):
+        v_aux = array([1, 0, 0])
+        self.assertRaises(ValueError, ecef2ned, v_aux, 91.0, 0)
+        self.assertRaises(ValueError, ecef2ned, v_aux, -90.001, 0)
+        self.assertRaises(TypeError, ecef2ned, v_aux, 't', 0)
+
+    def test_longitude_wrong_input(self):
+        v_aux = array([1, 0, 0])
+        self.assertRaises(ValueError, ecef2ned, v_aux, 0, -190.1)
+        self.assertRaises(ValueError, ecef2ned, v_aux, 0, 180.1)
+        self.assertRaises(TypeError, ecef2ned, v_aux, 0, '0')
+
+    def test_1(self):
+        lat, lng = 0, 0
+
+        v_ecef = array([1, 0, 0])
+        expected_value = array([0, 0, -1])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+        v_ecef = array([0, 1, 0])
+        expected_value = array([0, 1, 0])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+        v_ecef = array([0, 0, 1])
+        expected_value = array([1, 0, 0])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+    def test_2(self):
+        lat, lng = 0, 90
+
+        v_ecef = array([1, 0, 0])
+        expected_value = array([0, -1, 0])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+        v_ecef = array([0, 1, 0])
+        expected_value = array([0, 0, -1])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+        v_ecef = array([0, 0, 1])
+        expected_value = array([1, 0, 0])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+    def test_3(self):
+        lat, lng = 90, 0
+
+        v_ecef = array([1, 0, 0])
+        expected_value = array([-1, 0, 0])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+        v_ecef = array([0, 1, 0])
+        expected_value = array([0, 1, 0])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+        v_ecef = array([0, 0, 1])
+        expected_value = array([0, 0, -1])
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+
 class Test_body2ned(ut.TestCase):
     """
     Test function that transforms body-basis vectors to ned-basis
