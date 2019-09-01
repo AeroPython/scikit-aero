@@ -316,6 +316,15 @@ class Test_body2ned(ut.TestCase):
         self.assertTrue(np.allclose(body2ned(v_body, theta, phi, psi),
                                     expected_value))
 
+    def test_body2ned2body(self):
+        v = array([7, 12, -31])
+
+        theta, phi, psi = deg2rad(54), deg2rad(-12), deg2rad(76)
+        v_ned = body2ned(v, theta, phi, psi)
+        expected_value = v
+        self.assertTrue(np.allclose(ned2body(v_ned, theta, phi, psi),
+                                    expected_value))
+
 
 class Test_ned2body(ut.TestCase):
     """
@@ -471,6 +480,15 @@ class Test_ned2body(ut.TestCase):
         self.assertTrue(np.allclose(ned2body(v_ned, theta, phi, psi),
                                     expected_value))
 
+    def test_ned2body2ned(self):
+        v = array([7, -2, 1])
+
+        theta, phi, psi = deg2rad(5), deg2rad(21), deg2rad(6)
+        v_body = ned2body(v, theta, phi, psi)
+        expected_value = v
+        self.assertTrue(np.allclose(body2ned(v_body, theta, phi, psi),
+                                    expected_value))
+
 
 class Test_body2wind(ut.TestCase):
     """
@@ -584,6 +602,15 @@ class Test_body2wind(ut.TestCase):
         self.assertTrue(np.allclose(body2wind(v_body, alpha, beta),
                                     expected_value))
 
+    def test_body2wind2body(self):
+        v = array([10, -8, -1])
+
+        alpha, beta = deg2rad(10), deg2rad(-7)
+        v_wind = body2wind(v, alpha, beta)
+        expected_value = v
+        self.assertTrue(np.allclose(wind2body(v_wind, alpha, beta),
+                                    expected_value))
+
 
 class Test_wind2body(ut.TestCase):
     """
@@ -695,4 +722,13 @@ class Test_wind2body(ut.TestCase):
         alpha, beta = deg2rad(0), deg2rad(-90)
         expected_value = array([0, 0, 1])
         self.assertTrue(np.allclose(wind2body(v_wind, alpha, beta),
+                                    expected_value))
+
+    def test_wind2body2wind(self):
+        v = array([0, -2, -16])
+
+        alpha, beta = deg2rad(19), deg2rad(37)
+        v_body = wind2body(v, alpha, beta)
+        expected_value = v
+        self.assertTrue(np.allclose(body2wind(v_body, alpha, beta),
                                     expected_value))
