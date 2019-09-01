@@ -161,6 +161,15 @@ class Test_ned2ecef(ut.TestCase):
         self.assertTrue(np.allclose(ned2ecef(v_ned, lat, lng),
                                     expected_value))
 
+    def test_ned2ecef2ned(self):
+        v = array([1, 0.43, -3])
+
+        lat, lng = 67, 31.45
+        v_ecef = ned2ecef(v, lat, lng)
+        expected_value = v
+        self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
 
 class Test_ecef2ned(ut.TestCase):
     """
@@ -230,6 +239,15 @@ class Test_ecef2ned(ut.TestCase):
         v_ecef = array([0, 0, 1])
         expected_value = array([0, 0, -1])
         self.assertTrue(np.allclose(ecef2ned(v_ecef, lat, lng),
+                                    expected_value))
+
+    def test_ecef2ned2ecef(self):
+        v = array([-56, 30.43, -81])
+
+        lat, lng = -39, 178.45
+        v_ned = ecef2ned(v, lat, lng)
+        expected_value = v
+        self.assertTrue(np.allclose(ned2ecef(v_ned, lat, lng),
                                     expected_value))
 
 
