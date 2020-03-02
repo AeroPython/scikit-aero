@@ -1,6 +1,6 @@
 """ Isentropic properties. """
 
-from __future__ import division, absolute_import
+from __future__ import absolute_import, division
 
 import numpy as np
 import scipy as sp

@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def zeta_coord(radius, centre_chi=0.0, centre_eta=0.0):

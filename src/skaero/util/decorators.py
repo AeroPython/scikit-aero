@@ -5,9 +5,9 @@ Decorators for multiple purposes.
 
 """
 
-from __future__ import division, absolute_import
+from __future__ import absolute_import, division
 
-from functools import wraps, update_wrapper
+from functools import update_wrapper, wraps
 
 
 def implicit(f):

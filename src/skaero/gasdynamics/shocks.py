@@ -4,14 +4,14 @@
 Shock waves.
 """
 
-from __future__ import division, absolute_import
+from __future__ import absolute_import, division
 
 import inspect
 
 import numpy as np
 from scipy import optimize
 
-from skaero.gasdynamics.isentropic import mach_angle, IsentropicFlow
+from skaero.gasdynamics.isentropic import IsentropicFlow, mach_angle
 
 
 # Exceptions used in this module
