@@ -1,0 +1,49 @@
+[build-system]
+requires = [
+    "flit_core >=2,<3",
+    "wheel",
+]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "skaero"
+author = "Juan Luis Cano"
+author-email = "hello@juanlu.space"
+description-file = "README.rst"
+home-page = "https://www.github.com/aeropython/scikit-aero"
+keywords = "aero,aeronautical,aerospace,engineering,atmopshere,gas"
+classifiers=[
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics"
+]
+requires-python = ">=3.6"
+requires = [
+    "numpy",
+    "scipy",    
+]
+
+[tool.flit.metadata.requires-extra]
+dev = [
+    "black",
+    "isort",
+    "pytest",
+    "pytest-cov",
+    "sphinx",
+    "sphinx_rtd_theme",
+    "tox",
+]
+
+[tool.flit.metadata.urls]
+Source = "https://github.com/aeropython/scikit-aero"
+Tracker = "https://github.com/aeropython/scikit-aero/issues"
+
+
+[tool.flit.entrypoints."console_scripts"]
+skaero = "skaero.cli:main"
