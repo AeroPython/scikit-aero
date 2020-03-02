@@ -13,6 +13,10 @@
         :target: https://aeropython.github.io/scikit-aero/
         :alt: Docs
 
+.. image:: https://img.shields.io/travis/com/aeropython/scikit-aero/master?style=for-the-badge
+        :target: https://travis-ci.com/aeropython/scikit-aero
+        :alt: Travis
+
 .. image:: https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=for-the-badge
         :target: aeropython@groups.io
         :alt: Email
