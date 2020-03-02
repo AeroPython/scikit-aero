@@ -1,9 +1,10 @@
 """ Isentropic properties. """
 
-from __future__ import division, absolute_import
+from __future__ import absolute_import, division
 
 import numpy as np
 import scipy as sp
+from scipy.optimize import bisect, newton
 
 from skaero.util.decorators import implicit
 
@@ -72,8 +73,8 @@ def mach_from_area_ratio(A_Astar, fl=None):
     elif A_Astar == 1.0:
         M_sub = M_sup = 1.0
     else:
-        M_sub = sp.optimize.bisect(eq, 0.0, 1.0, args=(A_Astar,))
-        M_sup = sp.optimize.newton(eq, 2.0, args=(A_Astar,))
+        M_sub = bisect(eq, 0.0, 1.0, args=(A_Astar,))
+        M_sup = newton(eq, 2.0, args=(A_Astar,))
 
     return M_sub, M_sup
 
@@ -115,7 +116,7 @@ def mach_from_nu(nu, in_radians=True, gamma=1.4):
         )
 
     eq = implicit(PrandtlMeyerExpansion.nu)
-    M = sp.optimize.newton(eq, 2.0, args=(nu,))
+    M = newton(eq, 2.0, args=(nu,))
 
     return M
 
