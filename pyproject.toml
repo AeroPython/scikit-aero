@@ -26,6 +26,7 @@ classifiers=[
 requires-python = ">=3.6"
 requires = [
     "numpy",
+    "matplotlib",
     "scipy",    
 ]
 
@@ -36,6 +37,7 @@ dev = [
     "pytest",
     "pytest-cov",
     "sphinx",
+    "nbsphinx",
     "sphinx_rtd_theme",
     "tox",
 ]
