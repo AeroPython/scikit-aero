@@ -5,7 +5,7 @@
 """
 
 import numpy as np
-from numpy import sin, cos, deg2rad, rad2deg, array
+from numpy import array, cos, deg2rad, rad2deg, sin
 
 
 def lla2ecef(lat, lng, h):
