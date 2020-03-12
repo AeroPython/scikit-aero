@@ -821,3 +821,49 @@ class Test_wind2body(ut.TestCase):
         expected_value = v
         self.assertTrue(np.allclose(body2wind(v_body, alpha, beta),
                                     expected_value))
+
+
+class Test_az_elev_dist(ut.TestCase):
+    """
+    Test function that calculates distance, azimuth and elevation of a point
+    as seen from a reference point
+    """
+    def test_latitude_wrong_input(self):
+        lla = array([91, 0, 0])
+        lla_ref = array([0, 0, 0])
+        self.assertRaises(ValueError, az_elev_dist, lla, lla_ref)
+
+        lla = array([0, 0, 0])
+        lla_ref = array([-210, 0, 0])
+        self.assertRaises(ValueError, az_elev_dist, lla, lla_ref)
+
+        lla = array(['a', 0, 0])
+        lla_ref = array([0, 0, 0])
+        self.assertRaises(TypeError, az_elev_dist, lla, lla_ref)
+
+    def test_longitude_wrong_input(self):
+        lla = array([0, -181, 0])
+        lla_ref = array([0, 0, 0])
+        self.assertRaises(ValueError, az_elev_dist, lla, lla_ref)
+
+        lla = array([0, 0, 0])
+        lla_ref = array([0, 189, 0])
+        self.assertRaises(ValueError, az_elev_dist, lla, lla_ref)
+
+        lla = array([0, 0, 0])
+        lla_ref = array([0, 'a', 0])
+        self.assertRaises(TypeError, az_elev_dist, lla, lla_ref)
+
+    def test_1(self):
+        lla = array([0, 0, 0])
+        lla_ref = array([0, 0.00001, 0])
+        expected_value = (90, 0, 1.113)
+        self.assertTrue(np.allclose(az_elev_dist(lla, lla_ref),
+                                    expected_value, atol=1e-3))
+
+    def test_2(self):
+        lla = array([0, 0, 0])
+        lla_ref = array([0, 0, 10])
+        expected_value = (0, 90, 10)
+        self.assertTrue(np.allclose(az_elev_dist(lla, lla_ref),
+                                    expected_value))

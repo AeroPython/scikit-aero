@@ -5,7 +5,7 @@
 """
 
 import numpy as np
-from numpy import sin, cos, deg2rad, array
+from numpy import sin, cos, deg2rad, rad2deg, array
 
 
 def lla2ecef(lat, lng, h):
@@ -289,3 +289,50 @@ def wind2body(v_wind, alpha, beta):
     v_body = Lbw.dot(v_wind)
 
     return v_body
+
+
+def az_elev_dist(lla, lla_ref):
+    """
+    Returns distance, azimuth angle and elevation angle that define the
+    position in the sky of a point (defined using lla coordinates) as viewed
+    from a point of reference (also defined by lla coordinates)
+    Parameters
+    ----------
+    lla : array-like
+        contains latitude and longitude (in degrees) and geometric altitude
+        above sea level in meters
+    lla_ref : array-like
+        contains reference point latitude and longitude (in degrees) and
+        geometric altitude above sea level in meters
+    Returns
+    -------
+    out : tuple-like
+        distance aircraft to reference point in m
+        azimuth angle (from the reference point) in degrees
+        elevation angle (from the reference point) in degrees
+    """
+    lat, lng, h = lla
+    lat_ref, lng_ref, h_ref = lla_ref
+
+    if abs(lat) > 90 or abs(lat_ref) > 90:
+        raise ValueError('latitude should be -90º <= latitude <= 90º')
+
+    if abs(lng) > 180 or abs(lng_ref) > 180:
+        raise ValueError('longitude should be -180º <= longitude <= 180º')
+
+    v = lla2ecef(lat, lng, h) - lla2ecef(lat_ref, lng_ref, h_ref)
+
+    v_unit_ecef = v / np.linalg.norm(v)
+    v_unit_ned = ecef2ned(v_unit_ecef, lat_ref, lng_ref)
+
+    azimuth = np.arctan2(-v_unit_ned[1], v_unit_ned[0])
+
+    if v_unit_ned[0] == v_unit_ned[1] == 0:
+        elevation = np.pi / 2
+    else:
+        elevation = np.arctan(-v_unit_ned[2] / np.sqrt(v_unit_ned[0]**2 +
+                                                       v_unit_ned[1]**2))
+
+    distance = np.linalg.norm(v)
+
+    return rad2deg(azimuth), rad2deg(elevation), distance
