@@ -16,8 +16,20 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
+   :caption: Skaero
 
    about_skaero
-   examples/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User guide
+   
+   examples/Convergent-divergent nozzle.ipynb
+   examples/Oblique shocks chart.ipynb
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API
+
    skaero/index
 
