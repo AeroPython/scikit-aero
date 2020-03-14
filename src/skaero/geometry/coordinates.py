@@ -29,13 +29,13 @@ def lla2ecef(lat, lng, h):
         ECEF coordinates in meters
     """
     if abs(lat) > 90:
-        raise ValueError('latitude should be -90º <= latitude <= 90º')
+        raise ValueError("latitude should be -90º <= latitude <= 90º")
 
     if abs(lng) > 180:
-        raise ValueError('longitude should be -180º <= longitude <= 180º')
+        raise ValueError("longitude should be -180º <= longitude <= 180º")
 
     if not (0 <= h <= 84852.05):
-        msg = 'pressure model is only valid if 0 <= h <= 84852.05'
+        msg = "pressure model is only valid if 0 <= h <= 84852.05"
         raise ValueError(msg)
 
     a = 6378137  # [m] Earth equatorial axis
@@ -45,11 +45,11 @@ def lla2ecef(lat, lng, h):
     lat = deg2rad(lat)  # degrees to radians
     lng = deg2rad(lng)  # degrees to radians
 
-    N = a / (1 - (e * sin(lat))**2)**(.5)
+    N = a / (1 - (e * sin(lat)) ** 2) ** (0.5)
 
     x = (N + h) * cos(lat) * cos(lng)
     y = (N + h) * cos(lat) * sin(lng)
-    z = (((b/a)**2) * N + h) * sin(lat)
+    z = (((b / a) ** 2) * N + h) * sin(lat)
 
     return array([x, y, z])
 
@@ -75,17 +75,21 @@ def ned2ecef(v_ned, lat, lng):
         vector expressed in ECEF coordinates
     """
     if abs(lat) > 90:
-        raise ValueError('latitude should be -90º <= latitude <= 90º')
+        raise ValueError("latitude should be -90º <= latitude <= 90º")
 
     if abs(lng) > 180:
-        raise ValueError('longitude should be -180º <= longitude <= 180º')
+        raise ValueError("longitude should be -180º <= longitude <= 180º")
 
     lat = deg2rad(lat)
     lng = deg2rad(lng)
 
-    Lne = array([[-sin(lat) * cos(lng), -sin(lat) * sin(lng), cos(lat)],
-                 [-sin(lng), cos(lng), 0],
-                 [-cos(lat) * cos(lng), -cos(lat) * sin(lng), -sin(lat)]])
+    Lne = array(
+        [
+            [-sin(lat) * cos(lng), -sin(lat) * sin(lng), cos(lat)],
+            [-sin(lng), cos(lng), 0],
+            [-cos(lat) * cos(lng), -cos(lat) * sin(lng), -sin(lat)],
+        ]
+    )
 
     Len = Lne.transpose()
     v_ecef = Len.dot(v_ned)
@@ -114,17 +118,21 @@ def ecef2ned(v_ecef, lat, lng):
         vector expressed in NED coordinates
     """
     if abs(lat) > 90:
-        raise ValueError('latitude should be -90º <= latitude <= 90º')
+        raise ValueError("latitude should be -90º <= latitude <= 90º")
 
     if abs(lng) > 180:
-        raise ValueError('longitude should be -180º <= longitude <= 180º')
+        raise ValueError("longitude should be -180º <= longitude <= 180º")
 
     lat = deg2rad(lat)
     lng = deg2rad(lng)
 
-    Lne = array([[-sin(lat) * cos(lng), -sin(lat) * sin(lng), cos(lat)],
-                 [-sin(lng), cos(lng), 0],
-                 [-cos(lat) * cos(lng), -cos(lat) * sin(lng), -sin(lat)]])
+    Lne = array(
+        [
+            [-sin(lat) * cos(lng), -sin(lat) * sin(lng), cos(lat)],
+            [-sin(lng), cos(lng), 0],
+            [-cos(lat) * cos(lng), -cos(lat) * sin(lng), -sin(lat)],
+        ]
+    )
 
     v_ned = Lne.dot(v_ecef)
 
@@ -152,24 +160,30 @@ def body2ned(v_body, theta, phi, psi):
     v_ned : array_like
         vector expressed in local horizon (NED) coordinates
     """
-    if abs(theta) > np.pi/2:
-        raise ValueError('theta should be -pi/2 <= theta <= pi/2')
+    if abs(theta) > np.pi / 2:
+        raise ValueError("theta should be -pi/2 <= theta <= pi/2")
 
     if abs(phi) > np.pi:
-        raise ValueError('phi should be -pi <= phi <= pi')
+        raise ValueError("phi should be -pi <= phi <= pi")
 
-    if not 0 <= psi <= 2*np.pi:
-        raise ValueError('psi should be 0 <= psi <= 2*pi')
+    if not 0 <= psi <= 2 * np.pi:
+        raise ValueError("psi should be 0 <= psi <= 2*pi")
 
-    Lnb = array([[cos(theta) * cos(psi),
-                  sin(phi) * sin(theta) * cos(psi) - cos(phi) * sin(psi),
-                  cos(phi) * sin(theta) * cos(psi) + sin(phi) * sin(psi)],
-                 [cos(theta) * sin(psi),
-                  sin(phi) * sin(theta) * sin(psi) + cos(phi) * cos(psi),
-                  cos(phi) * sin(theta) * sin(psi) - sin(phi) * cos(psi)],
-                 [-sin(theta),
-                  sin(phi) * cos(theta),
-                  cos(phi) * cos(theta)]])
+    Lnb = array(
+        [
+            [
+                cos(theta) * cos(psi),
+                sin(phi) * sin(theta) * cos(psi) - cos(phi) * sin(psi),
+                cos(phi) * sin(theta) * cos(psi) + sin(phi) * sin(psi),
+            ],
+            [
+                cos(theta) * sin(psi),
+                sin(phi) * sin(theta) * sin(psi) + cos(phi) * cos(psi),
+                cos(phi) * sin(theta) * sin(psi) - sin(phi) * cos(psi),
+            ],
+            [-sin(theta), sin(phi) * cos(theta), cos(phi) * cos(theta)],
+        ]
+    )
 
     v_ned = Lnb.dot(v_body)
 
@@ -197,24 +211,30 @@ def ned2body(v_ned, theta, phi, psi):
     v_body: array-like
         vector expressed in body coordinates
     """
-    if abs(theta) > np.pi/2:
-        raise ValueError('theta should be -pi/2 <= theta <= pi/2')
+    if abs(theta) > np.pi / 2:
+        raise ValueError("theta should be -pi/2 <= theta <= pi/2")
 
     if abs(phi) > np.pi:
-        raise ValueError('phi should be -pi <= phi <= pi')
+        raise ValueError("phi should be -pi <= phi <= pi")
 
-    if not 0 <= psi <= 2*np.pi:
-        raise ValueError('psi should be 0 <= psi <= 2*pi')
+    if not 0 <= psi <= 2 * np.pi:
+        raise ValueError("psi should be 0 <= psi <= 2*pi")
 
-    Lbn = array([[cos(theta) * cos(psi),
-                  cos(theta) * sin(psi),
-                  -sin(theta)],
-                 [sin(phi) * sin(theta) * cos(psi) - cos(phi) * sin(psi),
-                  sin(phi) * sin(theta) * sin(psi) + cos(phi) * cos(psi),
-                  sin(phi) * cos(theta)],
-                 [cos(phi) * sin(theta) * cos(psi) + sin(phi) * sin(psi),
-                  cos(phi) * sin(theta) * sin(psi) - sin(phi) * cos(psi),
-                  cos(phi) * cos(theta)]])
+    Lbn = array(
+        [
+            [cos(theta) * cos(psi), cos(theta) * sin(psi), -sin(theta)],
+            [
+                sin(phi) * sin(theta) * cos(psi) - cos(phi) * sin(psi),
+                sin(phi) * sin(theta) * sin(psi) + cos(phi) * cos(psi),
+                sin(phi) * cos(theta),
+            ],
+            [
+                cos(phi) * sin(theta) * cos(psi) + sin(phi) * sin(psi),
+                cos(phi) * sin(theta) * sin(psi) - sin(phi) * cos(psi),
+                cos(phi) * cos(theta),
+            ],
+        ]
+    )
 
     v_body = Lbn.dot(v_ned)
 
@@ -239,15 +259,19 @@ def body2wind(v_body, alpha, beta):
     v_wind : array_like
         vector expressed in wind coordinates
     """
-    if abs(alpha) > np.pi/2:
-        raise ValueError('alpha should be -pi/2 <= alpha <= pi/2')
+    if abs(alpha) > np.pi / 2:
+        raise ValueError("alpha should be -pi/2 <= alpha <= pi/2")
 
     if abs(beta) > np.pi:
-        raise ValueError('beta should be -pi <= beta <= pi')
+        raise ValueError("beta should be -pi <= beta <= pi")
 
-    Lwb = array([[cos(alpha) * cos(beta), sin(beta), sin(alpha) * cos(beta)],
-                 [-cos(alpha) * sin(beta), cos(beta), -sin(alpha) * sin(beta)],
-                 [-sin(alpha), 0, cos(alpha)]])
+    Lwb = array(
+        [
+            [cos(alpha) * cos(beta), sin(beta), sin(alpha) * cos(beta)],
+            [-cos(alpha) * sin(beta), cos(beta), -sin(alpha) * sin(beta)],
+            [-sin(alpha), 0, cos(alpha)],
+        ]
+    )
 
     v_wind = Lwb.dot(v_body)
 
@@ -272,19 +296,19 @@ def wind2body(v_wind, alpha, beta):
     v_body : array_like
         vector expressed in body coordinates
     """
-    if abs(alpha) > np.pi/2:
-        raise ValueError('alpha should be -pi/2 <= alpha <= pi/2')
+    if abs(alpha) > np.pi / 2:
+        raise ValueError("alpha should be -pi/2 <= alpha <= pi/2")
 
     if abs(beta) > np.pi:
-        raise ValueError('beta should be -pi <= beta <= pi')
+        raise ValueError("beta should be -pi <= beta <= pi")
 
-    Lbw = array([[cos(alpha) * cos(beta),
-                  -cos(alpha) * sin(beta),
-                  -sin(alpha)],
-                 [sin(beta), cos(beta), 0],
-                 [sin(alpha) * cos(beta),
-                  -sin(alpha) * sin(beta),
-                  cos(alpha)]])
+    Lbw = array(
+        [
+            [cos(alpha) * cos(beta), -cos(alpha) * sin(beta), -sin(alpha)],
+            [sin(beta), cos(beta), 0],
+            [sin(alpha) * cos(beta), -sin(alpha) * sin(beta), cos(alpha)],
+        ]
+    )
 
     v_body = Lbw.dot(v_wind)
 
@@ -315,10 +339,10 @@ def az_elev_dist(lla, lla_ref):
     lat_ref, lng_ref, h_ref = lla_ref
 
     if abs(lat) > 90 or abs(lat_ref) > 90:
-        raise ValueError('latitude should be -90º <= latitude <= 90º')
+        raise ValueError("latitude should be -90º <= latitude <= 90º")
 
     if abs(lng) > 180 or abs(lng_ref) > 180:
-        raise ValueError('longitude should be -180º <= longitude <= 180º')
+        raise ValueError("longitude should be -180º <= longitude <= 180º")
 
     v = lla2ecef(lat, lng, h) - lla2ecef(lat_ref, lng_ref, h_ref)
 
@@ -330,8 +354,9 @@ def az_elev_dist(lla, lla_ref):
     if v_unit_ned[0] == v_unit_ned[1] == 0:
         elevation = np.pi / 2
     else:
-        elevation = np.arctan(-v_unit_ned[2] / np.sqrt(v_unit_ned[0]**2 +
-                                                       v_unit_ned[1]**2))
+        elevation = np.arctan(
+            -v_unit_ned[2] / np.sqrt(v_unit_ned[0] ** 2 + v_unit_ned[1] ** 2)
+        )
 
     distance = np.linalg.norm(v)
 
