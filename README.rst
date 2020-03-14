@@ -1,51 +1,62 @@
-.. image:: doc/source/_static/logo.png
-        :align: center
+.. image:: docs/source/_static/logo.png
+    :align: center
 
-.. image:: https://img.shields.io/maintenance/yes/2019.svg?style=for-the-badge
+.. image:: https://img.shields.io/badge/Skaero-%E2%9C%88%EF%B8%8F-9cf
 	:target: https://github.com/AeroPython/scikit-aero
-	:alt: Maintenance
+	:alt: Skaero
 
-.. image:: https://img.shields.io/pypi/l/scikit-aero.svg?style=for-the-badge
-        :target: https://github.com/AeroPython/scikit-aero/blob/master/COPYING
-        :alt: License
+.. image:: https://img.shields.io/badge/Built%20with-Python%20%F0%9F%92%95%20-blue
+    :target: https://python.org
+    :alt: Built with Python
 
-.. image:: https://readthedocs.org/projects/pip/badge/?version=latest&style=for-the-badge
-        :target: https://aeropython.github.io/scikit-aero/
-        :alt: Docs
+.. image:: https://img.shields.io/pypi/l/scikit-aero.svg
+    :target: https://github.com/AeroPython/scikit-aero/blob/master/COPYING
+    :alt: License
 
-.. image:: https://img.shields.io/travis/com/aeropython/scikit-aero/master?style=for-the-badge
-        :target: https://travis-ci.com/aeropython/scikit-aero
-        :alt: Travis
+.. image:: https://readthedocs.org/projects/scikit-aero/badge/?version=latest
+    :target: https://scikit-aero.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
-.. image:: https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg?style=for-the-badge
-        :target: aeropython@groups.io
-        :alt: Email
+.. image:: https://travis-ci.org/AeroPython/scikit-aero.svg?branch=master
+    :target: https://travis-ci.org/AeroPython/scikit-aero
+    :alt: Travis
 
-|
+.. image:: https://codecov.io/gh/AeroPython/scikit-aero/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/AeroPython/scikit-aero
+    :alt: Coverage
 
-:Name: scikit-aero
-:Description: Aeronautical engineering calculations in Python
-:Website: https://github.com/AeroPython/scikit-aero
-:Author: AeroPython Team <aeropython@groups.io>
-:Version: 0.2.dev0
+.. image:: https://img.shields.io/badge/mailing%20list-groups.io-8cbcd1.svg
+    :target: aeropython@groups.io
+    :alt: Email
 
-|
 
 Scikit-aero
------------
+===========
 
-scikit-aero is a Python package for various aeronautical engineering
-calculations. It is based on several existing Python packages on the field,
-but intends to provide pythonic syntax, use of SI units and full NumPy arrays
-support among other things. scikit-aero is licensed under the BSD license.
+Scikit-aero is a Python package for various aeronautical engineering
+calculations. It is based on several existing Python packages on the field, but
+intends to provide pythonic syntax, use of SI units and full NumPy arrays
+support among other things. The software is licensed under the BSD license.
 
-It was started by Juan Luis Cano in 2012 and has code from several
-contributors (see AUTHORS). The source code and issue tracker are both hosted
-on GitHub
+It was started by Juan Luis Cano in 2012 and has code from several contributors
+(see AUTHORS). The source code and issue tracker are both hosted on GitHub
 
-**Notice**: This package is under heavy development and the API might change
-at any time until a 1.0 version is reached. It is stable but not feaure
-complete yet, and it might contain bugs.
+Installation
+------------
+
+This package fulfills the last standard PEP-517 and PEP-518 by including a
+`pyproject.toml` file and making use of a tool called [Flit](https://pypi.org/project/flit/)
+for the installation of the software. Follow these steps to install scikit-aero:
+
+1. Clone the repository or just download the latest release in the [releases
+section](https://github.com/AeroPython/scikit-aero/releases).
+
+2. Run the following commands:
+
+   .. code-block:: bash
+
+        $ pip install pygments, flit
+        $ flit install --symlink path/to/scikit-aero
 
 Features
 --------
@@ -53,7 +64,6 @@ Features
 * Pythonic interface.
 * Use of SI units.
 * Full support of NumPy arrays.
-* Support for both Python 2 and 3.
 * Fully tested and documented.
 * Standard atmosphere properties up to 86 kilometers.
 * Gas dynamics calculations.
@@ -65,138 +75,47 @@ Future
 * Coordinate systems.
 * Most of the PDAS.
 
-Usage
-=====
+Usage and documentation
+-----------------------
 
-Atmosphere properties:
-
-.. code-block:: python
-
-        from skaero.atmosphere import coesa
-        h, T, p, rho = coesa.table(1000)  # Altitude by default, 1 km
-
-Inverse computations allowed with density and pressure, which are monotonic:
-
-.. code-block:: python
-
-        h, T, p, rho = coesa.table(p=101325)  # Pressure of 1 atm
-
-Gas dynamics calculations:
-
-.. code-block:: python
-
-        from skaero.gasdynamics import isentropic, shocks
-        fl = isentropic.IsentropicFlow(gamma=1.4)
-        p = 101325 * fl.p_p0(M=0.8)  # Static pressure given total pressure of 1 atm
-        ns = shocks.Shock(M_1=2.5, gamma=1.4)
-        M_2 = ns.M_2  # Mach number behind a normal shock wave
-        os = shocks.Shock(M_1=3.0, theta=np.radians(25), weak=True)
-
-Dependencies
-============
-
-This package depends on Python, NumPy and SciPy and is usually tested on
-Linux with the following versions:
-
-* Python 2.7, NumPy 1.6, SciPy 0.11
-* Python 3.3, NumPy 1.7.0b2, SciPy 0.11.0
-
-but there is no reason it shouldn't work on Windows or Mac OS X and other
-Python versions newer or equal to 2.5. If you are
-willing to provide testing on this platforms, please
-`contact me <mailto:juanlu001@gmail.com>`_ and if you find any bugs file them
-on the `issue tracker`_.
-
-Optional
---------
-
-For running the tests, `py.test`_ is recommended (see `Testing`_). The examples are
-in `IPython`_ notebook format, so to run them locally you will need a recent
-version of IPython and its dependencies.
-
-.. _`py.test`: http://pytest.org
-.. _`IPython`: http://ipython.org/
-
-Install
-=======
-
-To install just execute:
-
-.. code-block:: bash
-
-        $ pip install scikit-aero
-
-If you want to install the package in development mode, please execute:
-
-.. code-block:: bash
-
-        $ pip install --editable /path_to_scikit-aero
-
-It is recommended that you **never ever use sudo** with distutils, pip,
-setuptools and friends in Linux because you might seriously break your
-system [1_][2_][3_][4_]. I recommend using `virtualenv`_, `per user directories`_
-or `local installations`_.
-
-.. _1: http://wiki.python.org/moin/CheeseShopTutorial#Distutils_Installation
-.. _2: http://stackoverflow.com/questions/4314376/how-can-i-install-a-python-egg-file/4314446#comment4690673_4314446
-.. _3: http://workaround.org/easy-install-debian
-.. _4: http://matplotlib.1069221.n5.nabble.com/Why-is-pip-not-mentioned-in-the-Installation-Documentation-tp39779p39812.html
-
-.. _`virtualenv`: http://pypi.python.org/pypi/virtualenv
-.. _`per user directories`: http://stackoverflow.com/a/7143496/554319
-.. _`local installations`: http://stackoverflow.com/a/4325047/554319
+Official docs are hosted [here](https://scikit-aero.readthedocs.io/en/latest/).
+You can find not only installation instructions, but also a set of examples together
+with the API documentation.
 
 Testing
-=======
+-------
 
-scikit-aero recommends py.test for running the test suite. Running from the
-top directory:
+It is possible to run the tests by making use of a tool called `tox`, which not
+only tests the logic Python files but also other things such us code format and
+coverage. Tox is based on what are called "environments", each one defined by its
+own name in this package:
 
-.. code-block:: bash
-
-        $ pytest
-
-To test code coverage, make sure you install `py.test-cov`_ extension and run:
-
-.. code-block:: bash
-
-        $ pytest --cov skaero/
-
-.. _`py.test-cov`: https://pypi.python.org/pypi/pytest-cov
-
-Examples
-========
-
-Some applied examples are in the folder `examples` in the IPython notebook
-format. To see them without running locally, use `nbviewer`_; for example,
-to see the `cd_nozzle.ipynb` notebook, browse to
-
-http://nbviewer.ipython.org/url/raw.github.com/Pybonacci/scikit-aero/master/examples/Oblique%20shocks%20chart.ipynb
-
-.. _`nbviewer`: http://nbviewer.ipython.org/
+* `tox -e check`: will check if code fulfills proper format.
+* `tox -e reformat`: applies proper format for passing the previous environment.
+* `tox -e coverage`: runs coverage test against actual code.
+* `tox -e py36`: will check if tests sucessfully run in Python3.6.
 
 Bug reporting
-=============
+-------------
 
-I am pretty sure I never introduce bugs in my code, but if you want to prove
-me wrong please refer to the `issue tracker`_ on GitHub.
+If you find any bugs on the software, please refer to the `issue tracker`_ on GitHub.
 
 .. _`issue tracker`: https://github.com/Juanlu001/scikit-aero/issues
 
 Citing
-======
+------
 
 If you use scikit-aero on your project, please
 `drop me a line <mailto:juanlu001@gmail.com>`_.
 
 License
-=======
+-------
 
 scikit-aero is released under a 2-clause BSD license, hence allowing commercial use
 of the library. Please refer to the COPYING file.
 
 See also
-========
+--------
 
 * `AeroCalc`_, package written by Kevin Horton which inspired scikit-aero.
 * `MATLAB Aerospace Toolbox`_,
