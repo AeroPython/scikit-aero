@@ -10,4 +10,4 @@ R_earth = 6.3781366e6 * u.meters
 
 # Standard Earth's gravity acceleration value from "The International System of
 # Units by Barry N.Taylor and Ambler Thompson"
-g0 = 9.80665 * u.meters / u.seconds
+g0 = 9.80665 * u.meters / u.seconds ** 2
