@@ -107,9 +107,9 @@ def _ShockFactory(**kwargs):
     methods_list = [_from_deflection_angle]
 
     # And we generate a dictionary from it, indexed by their call arguments
-    methods = {frozenset(inspect.getargspec(f)[0]): f for f in methods_list}
+    methods = {frozenset(inspect.getfullargspec(f)[0]): f for f in methods_list}
     # HACK, see http://stackoverflow.com/a/3999604/554319
-    _k_class = frozenset(inspect.getargspec(_ShockClass.__init__)[0]) - set(["self"])
+    _k_class = frozenset(inspect.getfullargspec(_ShockClass.__init__)[0]) - set(["self"])
     methods[_k_class] = _ShockClass
     try:
         call_sig = frozenset(params)
